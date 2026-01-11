@@ -19,5 +19,5 @@ console.log("Indice: ", resultado);
 
 
 // Con un find
-resultado = carrito.find( producto => producto.nombre === 'Teclado');
+resultado = carrito.find( producto => producto.nombre === 'Teclados');
 console.log(resultado);
