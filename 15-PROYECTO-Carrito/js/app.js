@@ -1,7 +1,7 @@
 // Variables
 const carrito = document.querySelector('#carrito');
 const contenedorCarrito = document.querySelector('#lista-carrito tbody');
-const vaciarCarrito = document.querySelector('#vaciar-carrito');
+const vaciarCarritoBtn = document.querySelector('#vaciar-carrito');
 const listaCursos = document.querySelector('#lista-cursos');
 let articulosCarrito = [];
 
@@ -10,7 +10,8 @@ cargarEventListeners();
 function cargarEventListeners() {
     // Cuando agregas un curso presionando "Agregar al Carrito"
     listaCursos.addEventListener('click', agregarCurso);
-    vaciarCarrito.addEventListener('click', limpiarCarrito);
+    carrito.addEventListener('click', eliminarCurso);
+    vaciarCarritoBtn.addEventListener('click', limpiarCarrito);
 }
 
 function limpiarCarrito() {
@@ -75,17 +76,25 @@ function carritoHTML() {
                 <a href="#" class="borrar-curso" data-id="${id}" > X </a>
             </td>
         `;
-        row.querySelector('a').addEventListener('click', eliminaArticulo);
+        // row.querySelector('a').addEventListener('click', eliminarCurso);
         
         contenedorCarrito.appendChild(row);
     });
 }
 
-function eliminaArticulo(e) {
-    e.preventDefault();
-    const id = e.target.getAttribute('data-id');
-    articulosCarrito = articulosCarrito.filter( curso => curso.id !== id );
-    carritoHTML();
+// Elimina un curso del carrito
+function eliminarCurso(e) {
+    // Comentada mi solución
+    // e.preventDefault();
+    // const id = e.target.getAttribute('data-id');
+    // articulosCarrito = articulosCarrito.filter( curso => curso.id !== id );
+    // carritoHTML();
+    if(e.target.classList.contains('borrar-curso')){
+        const id = e.target.getAttribute('data-id');
+        // Elimina del array de articulosCarrito por el data-id
+        articulosCarrito = articulosCarrito.filter( curso => curso.id !== id );
+        carritoHTML();
+    }
 }
 
 // Elimina los cursos del tbody
