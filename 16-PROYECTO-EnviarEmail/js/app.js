@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputAsunto = document.querySelector('#asunto');
     const inputMensaje = document.querySelector('#mensaje');
     const formulario = document.querySelector('#formulario');
-    const enviar = document.querySelector('#formulario button[type="submit"]');
+    const btnEnviar = document.querySelector('#formulario button[type="submit"]');
+    const btnReset = document.querySelector('#formulario button[type="reset"]');
+    const spinner = document.querySelector('#spinner');
+    
     
     // Al refrescar la página pueden haber valores en los campos
     const email = {
@@ -22,10 +25,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Asignar eventos
     inputEmail.addEventListener('blur', validar);
-
     inputAsunto.addEventListener('blur', validar);
-
     inputMensaje.addEventListener('blur', validar);
+    inputAsunto.addEventListener('input', validar);
+    inputMensaje.addEventListener('input', validar);
+
+    formulario.addEventListener('submit', enviarEmail);
+
+    btnReset.addEventListener('click', e => {
+        e.preventDefault();
+        resetearFormulario();
+        
+        comprobarEmail();
+        cleanAllAlerts(formulario);
+    });
+
+
+    function enviarEmail(e) {
+        e.preventDefault();
+        spinner.classList.add('flex');
+        spinner.classList.remove('hidden');
+        setTimeout(() => {
+            spinner.classList.remove('flex');
+            spinner.classList.add('hidden');
+            resetearFormulario();
+        }, 3000);
+        
+    }
+
+    function resetearFormulario() {
+        formulario.reset();
+        // Reiniciar el objeto
+        for(campo in email) {
+            email[campo] = '';
+        }
+    }
 
     function validar(e) {
         if(e.target.value.trim() === '') {
@@ -48,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         limpiaAlerta(e.target.parentElement);
         email[e.target.id] = e.target.value.trim();
-        console.log(email);
         // Comprobamos si se puede enviar
         comprobarEmail();
         
@@ -72,6 +105,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function cleanAllAlerts(referencia) {
+        // Remueve todas las alertas del formulario
+        const alertas = referencia.querySelectorAll('.bg-red-600');
+        alertas.forEach(alerta => alerta.remove() );
+    }
+
     function validarEmail(email) {
         // const regex =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
         const regex =  /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,12}$/;
@@ -81,11 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function comprobarEmail() {
         if(email.email && email.asunto && email.mensaje) {
-            enviar.disabled = false;
-            enviar.classList.remove('opacity-50');
+            btnEnviar.disabled = false;
+            btnEnviar.classList.remove('opacity-50');
         } else {
-            enviar.disabled = true;
-            enviar.classList.add('opacity-50');
+            btnEnviar.disabled = true;
+            btnEnviar.classList.add('opacity-50');
         }
     }
 });
