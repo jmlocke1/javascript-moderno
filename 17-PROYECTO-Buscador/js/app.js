@@ -1,6 +1,10 @@
 // Variables
 const resultado = document.querySelector('#resultado');
+const marca = document.querySelector('#marca');
 const year = document.querySelector('#year');
+const precioMin = document.querySelector('#minimo');
+const precioMax = document.querySelector('#maximo');
+const color = document.querySelector('#color');
 // const { min, max } = minMaxYear();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,13 +27,17 @@ function mostrarAutos() {
 }
 
 function llenarSelect() {
-    const years = yearsAutos();
-    console.log(yearsAutos());
-    years.forEach( y => {
-        const yearOption = document.createElement('OPTION');
-        yearOption.value = y;
-        yearOption.textContent = y;
-        year.appendChild(yearOption);
+    llenarSelectDOM(year, 'year', false);
+}
+
+function llenarSelectDOM(elemento, campo, ascendente = true) {
+    const campos = differentFields(campo, ascendente);
+    console.log(campos);
+    campos.forEach( valor => {
+        const elementOption = document.createElement('OPTION');
+        elementOption.value = valor;
+        elementOption.textContent = valor;
+        elemento.appendChild(elementOption);
     });
 }
 
@@ -48,12 +56,34 @@ function llenarSelect() {
 //     return {min, max};
 // }
 
-function yearsAutos() {
-    const years = [];
+// function yearsAutos() {
+//     const years = [];
+//     autos.forEach(auto => {
+//         if(!years.includes(auto.year)) years.push(auto.year);
+//     });
+//     // Ordenar de mayor a menor
+//     years.sort( (a, b) => b - a );
+//     return years;
+// }
+
+function differentFields(campo, ascendente = true) {
+    const fields = [];
     autos.forEach(auto => {
-        if(!years.includes(auto.year)) years.push(auto.year);
+        if(!fields.includes(auto[campo])) fields.push(auto[campo]);
     });
     // Ordenar de mayor a menor
-    years.sort( (a, b) => b - a );
-    return years;
+    if(ascendente) {
+        if(Number.isInteger(fields[0])) {
+            fields.sort( (a, b) => a - b );
+        } else {
+            fields.sort();
+        }
+    } else {
+        if(Number.isInteger(fields[0])) {
+            fields.sort( (a, b) => b - a );
+        } else {
+            fields.sort().reverse();
+        }
+    }
+    return fields;
 }

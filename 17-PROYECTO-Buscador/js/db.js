@@ -177,7 +177,7 @@ const autos = [
         year: 2010, 
         precio: 30000, 
         puertas: 4, 
-        color: 'Azul', 
+        color: 'Turquesa', 
         transmision: 'automático' 
     }
 ];
