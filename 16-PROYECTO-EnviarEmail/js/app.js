@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Seleccionar los elementos de la interfaz
     const inputEmail = document.querySelector('#email');
+    const inputCC = document.querySelector('#ccemail');
     const inputAsunto = document.querySelector('#asunto');
     const inputMensaje = document.querySelector('#mensaje');
     const formulario = document.querySelector('#formulario');
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Al refrescar la página pueden haber valores en los campos
     const email = {
         email: validarEmail(inputEmail.value) ? inputEmail.value.trim() : '',
+        ccemail: validarEmail(inputCC.value) ? inputCC.value.trim() : '',
         asunto: inputAsunto.value.trim(),
         mensaje: inputMensaje.value.trim()
     }
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Asignar eventos
     inputEmail.addEventListener('blur', validar);
+    inputCC.addEventListener('blur', validar);
     inputAsunto.addEventListener('blur', validar);
     inputMensaje.addEventListener('blur', validar);
     inputAsunto.addEventListener('input', validar);
@@ -36,11 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         resetearFormulario();
         
-        comprobarEmail();
         cleanAllAlerts(formulario);
     });
 
 
+    
     function enviarEmail(e) {
         e.preventDefault();
         spinner.classList.add('flex');
@@ -49,6 +52,15 @@ document.addEventListener('DOMContentLoaded', function() {
             spinner.classList.remove('flex');
             spinner.classList.add('hidden');
             resetearFormulario();
+            
+            // Crear una alerta
+            const alertaExito = document.createElement('P');
+            alertaExito.classList.add('bg-green-500', 'text-white', 'p-2', 'text-center', 'rounded-lg', 'mt-10', 'font-bold', 'text-sm', 'uppercase');
+            alertaExito.textContent = 'Mensaje enviado correctamente';
+            formulario.appendChild(alertaExito);
+            setTimeout(() => {
+                alertaExito.remove();
+            }, 3000);
         }, 3000);
         
     }
@@ -59,29 +71,32 @@ document.addEventListener('DOMContentLoaded', function() {
         for(campo in email) {
             email[campo] = '';
         }
+        comprobarEmail();
     }
 
     function validar(e) {
-        if(e.target.value.trim() === '') {
+        if(e.target.value.trim() === '' && e.target.id !== 'ccemail') {
             mostrarAlerta(`El campo ${e.target.id} es obligatorio`, e.target.parentElement);
             email[e.target.id] = '';
             comprobarEmail();
             return;
         }
         
-        if(e.target.id === 'email') {
+        if((e.target.id === 'email' || e.target.id === 'ccemail') && e.target.value.trim() !== '') {
+            console.log('estamos en email', e.target.id);
             // Lo pone en minúscula
             e.target.value = e.target.value.toLowerCase();
             if(!validarEmail(e.target.value)) {
                 mostrarAlerta('El email no es válido', e.target.parentElement);
                 email[e.target.id] = '';
                 comprobarEmail();
-                return;
+                return false;
             }
         }
 
         limpiaAlerta(e.target.parentElement);
         email[e.target.id] = e.target.value.trim();
+        console.log(email);
         // Comprobamos si se puede enviar
         comprobarEmail();
         
@@ -119,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function comprobarEmail() {
-        if(email.email && email.asunto && email.mensaje) {
+        if(email.email && email.asunto && email.mensaje && (email.ccemail || inputCC.value.trim() === '')) {
             btnEnviar.disabled = false;
             btnEnviar.classList.remove('opacity-50');
         } else {
