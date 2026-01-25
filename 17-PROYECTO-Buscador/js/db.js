@@ -6,7 +6,7 @@ const autos = [
 		precio: 30000,
 		puertas: 4,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{ 
         marca: 'Audi', 
@@ -15,7 +15,7 @@ const autos = [
         precio: 40000, 
         puertas: 4, 
         color: 'Negro', 
-        transmision: 'automatico' 
+        transmision: 'automático' 
     },
 	{
 		marca: 'Ford',
@@ -24,7 +24,7 @@ const autos = [
 		precio: 20000,
 		puertas: 2,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{ 
         marca: 'Audi', 
@@ -33,7 +33,7 @@ const autos = [
         precio: 35000, 
         puertas: 4, 
         color: 'Negro', 
-        transmision: 'automatico' 
+        transmision: 'automático' 
     },
 	{
 		marca: 'BMW',
@@ -42,7 +42,7 @@ const autos = [
 		precio: 70000,
 		puertas: 4,
 		color: 'Rojo',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{
 		marca: 'Mercedes Benz',
@@ -51,7 +51,7 @@ const autos = [
 		precio: 25000,
 		puertas: 4,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{
 		marca: 'Chevrolet',
@@ -78,7 +78,7 @@ const autos = [
 		precio: 40000,
 		puertas: 4,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{ 
         marca: 'Audi', 
@@ -106,7 +106,7 @@ const autos = [
 		precio: 45000,
 		puertas: 4,
 		color: 'Azul',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{
 		marca: 'BMW',
@@ -115,7 +115,7 @@ const autos = [
 		precio: 90000,
 		puertas: 4,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{ 
         marca: 'Ford', 
@@ -133,7 +133,7 @@ const autos = [
 		precio: 35000,
 		puertas: 2,
 		color: 'Azul',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{
 		marca: 'BMW',
@@ -142,7 +142,7 @@ const autos = [
 		precio: 50000,
 		puertas: 4,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{
 		marca: 'BMW',
@@ -151,7 +151,7 @@ const autos = [
 		precio: 80000,
 		puertas: 4,
 		color: 'Negro',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{
 		marca: 'Mercedes Benz',
@@ -160,7 +160,7 @@ const autos = [
 		precio: 40000,
 		puertas: 4,
 		color: 'Blanco',
-		transmision: 'automatico'
+		transmision: 'automático'
 	},
 	{ 
         marca: 'Audi', 
@@ -169,6 +169,15 @@ const autos = [
         precio: 30000, 
         puertas: 4, 
         color: 'Azul', 
-        transmision: 'automatico' 
+        transmision: 'automático' 
+    },
+	{ 
+        marca: 'Bugatti', 
+        modelo: 'Constantine', 
+        year: 2010, 
+        precio: 30000, 
+        puertas: 4, 
+        color: 'Azul', 
+        transmision: 'automático' 
     }
 ];
