@@ -1,24 +1,45 @@
 // Variables
-const resultado = document.querySelector('#resultado');
-const marca = document.querySelector('#marca');
-const year = document.querySelector('#year');
-const precioMin = document.querySelector('#minimo');
-const precioMax = document.querySelector('#maximo');
-const color = document.querySelector('#color');
-// Filtros, Array con los selectores del DOM
 
+// Filtros, Array con los selectores del DOM
+const selectores = ["#marca", "#year", "#minimo", "#maximo", "#puertas", "#transmision", "#color"];
+// Desestructuración de arrays para asignar los elementos del DOM a las variables
+const elementos = selectores.map((selector) => document.querySelector(selector));
+const [marca, year, precioMin, precioMax, puertas, transmision, color] = elementos;
+
+// Contenedor para los resultados
+const resultado = document.querySelector('#resultado');
+
+// Generar un objeto con la búsqueda
+const datosBusqueda = {
+    marca: '',
+    year: '',
+    minimo: '',
+    maximo: '',
+    puertas: '',
+    transmision: '',
+    color: ''
+};
 document.addEventListener('DOMContentLoaded', () => {
-    mostrarAutos();
+    document.querySelector('#buscador').reset();
+    mostrarAutos(autos);
 
     // Llena las opciones de años
     llenarSelect();
 });
 
-function guardarSeleccion() {
-    
+// event listener para los select de busqueda
+elementos.forEach((elemento) => {
+    elemento.addEventListener("change", guardarSeleccion);
+});
+
+function guardarSeleccion(e) {
+    datosBusqueda[e.target.id] = Number.isInteger(parseInt(e.target.value)) ? parseInt(e.target.value) : e.target.value;
+    filtrarAuto();
 }
 
-function mostrarAutos() {
+function mostrarAutos(autos) {
+    limpiarHTML();
+    // resultado.innerHTML = '';
     autos.forEach( auto => {
         const { marca, modelo, year, puertas, transmision, precio, color } = auto;
         const autoHTML = document.createElement('P');
@@ -26,8 +47,14 @@ function mostrarAutos() {
             ${marca} ${modelo} - ${year} - ${puertas} Puertas - Transmisión: ${transmision} - Precio: ${precio} - Color: ${color}
         `;
         // Insertar en el HTML
-        resultado.appendChild(autoHTML);
+        resultado.appendChild( autoHTML );
     });
+}
+
+function limpiarHTML() {
+    while(resultado.firstChild) {
+        resultado.removeChild(resultado.firstChild);
+    }
 }
 
 function llenarSelect() {
@@ -97,4 +124,71 @@ function differentFields(campo, ascendente = true) {
         }
     }
     return fields;
+}
+
+function filtrarAuto() {
+    const resultado = autos.filter( filtrarMarca ).filter( filterYear ).filter( filterMin ).filter( filterMax ).filter( filterPuertas ).filter( filterTransmision ).filter( filterColor );
+    if(resultado.length) {
+        mostrarAutos(resultado);
+    } else {
+        noResultado();
+    }
+    
+}
+
+function noResultado() {
+    limpiarHTML();
+    const noResultado = document.createElement('DIV');
+    noResultado.classList.add('alerta', 'error');
+    noResultado.textContent = 'No hay resultados, intenta con otros términos de búsqueda';
+    resultado.appendChild(noResultado);
+}
+
+function filtrarMarca(auto) {
+    if( datosBusqueda.marca ) {
+        return auto.marca === datosBusqueda.marca;
+    }
+    return auto;
+}
+
+function filterYear(auto) {
+    if( datosBusqueda.year ) {
+        return auto.year === datosBusqueda.year;
+    }
+    return auto;
+}
+
+function filterMin(auto) {
+    if( datosBusqueda.minimo ) {
+        return auto.precio >= datosBusqueda.minimo;
+    }
+    return auto;
+}
+
+function filterMax(auto) {
+    if( datosBusqueda.maximo ) {
+        return auto.precio <= datosBusqueda.maximo;
+    }
+    return auto;
+}
+
+function filterPuertas(auto) {
+    if( datosBusqueda.puertas ) {
+        return auto.puertas === datosBusqueda.puertas;
+    }
+    return auto;
+}
+
+function filterTransmision(auto) {
+    if( datosBusqueda.transmision ) {
+        return auto.transmision === datosBusqueda.transmision;
+    }
+    return auto;
+}
+
+function filterColor(auto) {
+    if( datosBusqueda.color ) {
+        return auto.color === datosBusqueda.color;
+    }
+    return auto;
 }
