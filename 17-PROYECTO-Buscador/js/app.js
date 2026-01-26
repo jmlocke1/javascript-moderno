@@ -30,11 +30,18 @@ function llenarSelect() {
     llenarSelectDOM(marca, 'marca');
     llenarSelectDOM(year, 'year', false);
     llenarPrecio();
+    llenarSelectDOM(color, 'color');
 }
 
+/**
+ * Función que inserta en el DOM las opciones de cada desplegable.
+ * 
+ * @param {DOMElement} elemento - Elemento del DOM donde se van a insertar las options
+ * @param {string} campo        - Campo que se va a buscar en la base de datos
+ * @param {boolean} ascendente  - Orden ascendente o descendente
+ */
 function llenarSelectDOM(elemento, campo, ascendente = true) {
     const campos = differentFields(campo, ascendente);
-    console.log(campos);
     campos.forEach( valor => {
         const elementOption = document.createElement('OPTION');
         elementOption.value = valor;
@@ -54,42 +61,26 @@ function llenarPrecio() {
         precioMin.appendChild(elementOption.cloneNode(true));
         precioMax.appendChild(elementOption);
     }
-    console.log(min, max);
 }
 
-// /**
-//  * 
-//  * @returns {min, max} Año mínimo y máximo de todos los coches que están en la base de datos
-//  */
-// function minMaxYear() {
-//     let min, max;
-//     min = max = autos[0].year;
-//     autos.forEach( auto => {
-//         auto.year > max ? max = auto.year : '';
-//         auto.year < min ? min = auto.year : '';
-//     });
-    
-//     return {min, max};
-// }
-
-// function yearsAutos() {
-//     const years = [];
-//     autos.forEach(auto => {
-//         if(!years.includes(auto.year)) years.push(auto.year);
-//     });
-//     // Ordenar de mayor a menor
-//     years.sort( (a, b) => b - a );
-//     return years;
-// }
-
+/**
+ * Función que devuelve un array con los valores no repetidos y ordenados de uno de los
+ * campos de la base de datos
+ * 
+ * @param {string} campo        - Campo que contiene el valor que se asignará al array
+ * @param {boolean} ascendente  - Orden ascendente o descendente
+ * @returns                     - Array con los valores ordenados y no repetidos
+ */
 function differentFields(campo, ascendente = true) {
     const fields = [];
     autos.forEach(auto => {
+        // Si el valor no está repetido, se añade al array
         if(!fields.includes(auto[campo])) fields.push(auto[campo]);
     });
     // Ordenar de mayor a menor
     if(ascendente) {
         if(Number.isInteger(fields[0])) {
+            // Los números se ordenan de forma diferente
             fields.sort( (a, b) => a - b );
         } else {
             fields.sort();
