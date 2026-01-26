@@ -27,7 +27,9 @@ function mostrarAutos() {
 }
 
 function llenarSelect() {
+    llenarSelectDOM(marca, 'marca');
     llenarSelectDOM(year, 'year', false);
+    llenarPrecio();
 }
 
 function llenarSelectDOM(elemento, campo, ascendente = true) {
@@ -39,6 +41,20 @@ function llenarSelectDOM(elemento, campo, ascendente = true) {
         elementOption.textContent = valor;
         elemento.appendChild(elementOption);
     });
+}
+
+function llenarPrecio() {
+    const precios = differentFields('precio');
+    const min = Math.floor(precios[0] / 10000) * 10000;
+    const max = Math.ceil(precios[precios.length - 1] / 10000) * 10000;
+    for(let i = min; i <= max; i += 10000){
+        const elementOption = document.createElement('OPTION');
+        elementOption.value = i;
+        elementOption.textContent = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format( i );
+        precioMin.appendChild(elementOption.cloneNode(true));
+        precioMax.appendChild(elementOption);
+    }
+    console.log(min, max);
 }
 
 // /**

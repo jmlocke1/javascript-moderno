@@ -175,9 +175,18 @@ const autos = [
         marca: 'Bugatti', 
         modelo: 'Constantine', 
         year: 2010, 
-        precio: 30000, 
+        precio: 17500, 
         puertas: 4, 
         color: 'Turquesa', 
+        transmision: 'automático' 
+    },
+	{ 
+        marca: 'Porsche', 
+        modelo: 'Carrera', 
+        year: 2014, 
+        precio: 114000, 
+        puertas: 4, 
+        color: 'Rojo Metalizado', 
         transmision: 'automático' 
     }
 ];
