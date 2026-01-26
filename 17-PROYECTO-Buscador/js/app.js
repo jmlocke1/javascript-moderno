@@ -5,7 +5,7 @@ const year = document.querySelector('#year');
 const precioMin = document.querySelector('#minimo');
 const precioMax = document.querySelector('#maximo');
 const color = document.querySelector('#color');
-// const { min, max } = minMaxYear();
+// Filtros, Array con los selectores del DOM
 
 document.addEventListener('DOMContentLoaded', () => {
     mostrarAutos();
@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Llena las opciones de años
     llenarSelect();
 });
+
+function guardarSeleccion() {
+    
+}
 
 function mostrarAutos() {
     autos.forEach( auto => {
