@@ -22,4 +22,11 @@ h1, h2 {
     max-width: 400px;
     margin: 0 auto;
     color: white;
+    /* Adicional fade-out*/
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.error.fade-out {
+    opacity: 0;
 }
