@@ -3,12 +3,21 @@ const formulario = document.querySelector('#formulario');
 const listaTweets = document.querySelector('#lista-tweets');
 const contenido = document.querySelector('#contenido');
 
+// Inicializamos tweets recuperándolos desde localStorage, o con un array vacío
 let tweets = [];
+
 // Event Listeners
 eventListeners();
 
 function eventListeners() {
     formulario.addEventListener('submit', agregarTweet);
+
+    // Cuando el documento está listo
+    document.addEventListener('DOMContentLoaded', () => {
+        tweets = JSON.parse(localStorage.getItem('tweets')) ?? [];
+        // Mostramos los tweets en pantalla, si los hay
+        crearHTML();
+    });
 }
 
 
@@ -36,6 +45,9 @@ function agregarTweet(e) {
 
     // Reiniciar el formulario
     formulario.reset();
+
+    // Agregar los tweets al localStorage
+    localStorage.setItem( 'tweets', JSON.stringify(tweets) );
 }
 
 // Mostrar mensaje de error
