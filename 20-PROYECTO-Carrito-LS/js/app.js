@@ -3,6 +3,7 @@ const carrito = document.querySelector('#carrito');
 const contenedorCarrito = document.querySelector('#lista-carrito tbody');
 const vaciarCarritoBtn = document.querySelector('#vaciar-carrito');
 const listaCursos = document.querySelector('#lista-cursos');
+const notificacionCarrito = document.querySelector('#notificacion-carrito');
 let articulosCarrito = [];
 
 cargarEventListeners();
@@ -24,11 +25,11 @@ function sincronizarStorage() {
 }
 
 function limpiarCarrito() {
-    // Limpiamos el HTML del carrito
-    limpiarHTML();
-    // Vaciamos el array de artículos
+    // Vaciamos el array de artículos y sincronizamos con localStorage
     articulosCarrito = [];
     sincronizarStorage();
+    // Limpiamos el HTML del carrito llamando a carritoHTML
+    carritoHTML();
 }
 
 // Funciones
@@ -87,10 +88,20 @@ function carritoHTML() {
                 <a href="#" class="borrar-curso" data-id="${id}" > X </a>
             </td>
         `;
-        // row.querySelector('a').addEventListener('click', eliminarCurso);
-        
         contenedorCarrito.appendChild(row);
     });
+    addNotification();
+}
+
+function addNotification() {
+    let cantidad = 0;
+    articulosCarrito.forEach( producto => cantidad += producto.cantidad);
+    if(cantidad > 0) {
+        notificacionCarrito.dataset.cantidadnotificacion = cantidad;
+        notificacionCarrito.classList.add('notificacion-carrito--visible');
+    } else {
+        notificacionCarrito.classList.remove('notificacion-carrito--visible');
+    }
 }
 
 // Elimina un curso del carrito
