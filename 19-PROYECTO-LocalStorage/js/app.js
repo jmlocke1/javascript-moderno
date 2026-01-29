@@ -83,7 +83,11 @@ function crearHTML() {
             const li = document.createElement('li');
 
             // Añadir el texto
-            li.innerText = tweet.tweet;
+            // Primero creamos la fecha
+            const fecha = new Date(tweet.id);
+            const texto = `${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString()} - ${tweet.tweet}`;
+            console.log(fecha.toUTCString());
+            li.innerText = texto;
 
             // Asignar el botón
             li.appendChild(btnEliminar);
