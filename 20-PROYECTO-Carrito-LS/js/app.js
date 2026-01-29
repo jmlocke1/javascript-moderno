@@ -95,7 +95,8 @@ function carritoHTML() {
 
 function addNotification() {
     let cantidad = 0;
-    articulosCarrito.forEach( producto => cantidad += producto.cantidad);
+    // articulosCarrito.forEach( producto => cantidad += producto.cantidad);
+    cantidad = articulosCarrito.reduce( (cantidad, articulo) => cantidad + articulo.cantidad, 0);
     if(cantidad > 0) {
         notificacionCarrito.dataset.cantidadnotificacion = cantidad;
         notificacionCarrito.classList.add('notificacion-carrito--visible');
