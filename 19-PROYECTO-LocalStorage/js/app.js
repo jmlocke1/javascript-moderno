@@ -85,8 +85,8 @@ function crearHTML() {
             // Añadir el texto
             // Primero creamos la fecha
             const fecha = new Date(tweet.id);
-            const texto = `${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString()} - ${tweet.tweet}`;
-            console.log(fecha.toUTCString());
+            const texto = `${fecha.toLocaleDateString('en-gb')} ${fecha.toLocaleTimeString()} - ${tweet.tweet}`;
+            
             li.innerText = texto;
 
             // Asignar el botón
