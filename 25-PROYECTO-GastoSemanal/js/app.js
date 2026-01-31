@@ -3,6 +3,7 @@ const $formulario = document.querySelector('#agregar-gasto'),
       $gastoListado = document.querySelector('#gastos ul'),
       $total = document.querySelector('#total'),
       $restante = document.querySelector('#restante'),
+      $add = document.querySelector('#add'),
       $reset = document.querySelector('button[type="reset"]');
 console.log($reset);
 let presupuesto;
@@ -16,6 +17,7 @@ function evenListeners() {
         localStorage.removeItem('presupuesto');
         window.location.reload();
     });
+    $add.addEventListener('click', aumentaPresupuesto);
 }
 
 // Clases
@@ -32,6 +34,12 @@ class Presupuesto {
             this.gastos = presupuesto.gastos;
         }
         
+    }
+
+    aumentaPresupuesto(cantidad) {
+        this.presupuesto += Number(cantidad);
+        this.restante += Number(cantidad);
+        this.save();
     }
 
     save() {
@@ -68,6 +76,17 @@ function preguntarPresupuesto() {
     
     presupuesto = new Presupuesto(presupuestoUsuario);
     UI.insertarPresupuesto(presupuesto);
+}
+
+function aumentaPresupuesto() {
+    const presupuestoUsuario = prompt('¿Nueva cantidad para incrementar el presupuesto?');
+        
+    if(presupuestoUsuario === '' || presupuestoUsuario === null || isNaN(presupuestoUsuario) || presupuestoUsuario <= 0) {
+        aumentaPresupuesto();
+    } else {
+        presupuesto.aumentaPresupuesto(presupuestoUsuario);
+        UI.insertarPresupuesto(presupuesto);
+    }
 }
 
 function moneda(cantidad) {
