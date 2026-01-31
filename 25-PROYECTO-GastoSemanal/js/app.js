@@ -12,11 +12,7 @@ let presupuesto;
 evenListeners();
 function evenListeners() {
     document.addEventListener('DOMContentLoaded', preguntarPresupuesto);
-    $reset.addEventListener('click', e => {
-        e.preventDefault();
-        localStorage.removeItem('presupuesto');
-        window.location.reload();
-    });
+    $reset.addEventListener('click', eliminaPresupuesto);
     $add.addEventListener('click', aumentaPresupuesto);
 }
 
@@ -66,10 +62,12 @@ function preguntarPresupuesto() {
     let presupuestoUsuario = JSON.parse(localStorage.getItem('presupuesto'));
     
     if(!presupuestoUsuario){
+
         presupuestoUsuario = prompt('¿Cuál es tu presupuesto?');
-        
+        console.log(presupuestoUsuario);
         if(presupuestoUsuario === '' || presupuestoUsuario === null || isNaN(presupuestoUsuario) || presupuestoUsuario <= 0) {
             window.location.reload();
+            return;
         }
     }
     
@@ -86,6 +84,14 @@ function aumentaPresupuesto() {
     } else {
         presupuesto.aumentaPresupuesto(presupuestoUsuario);
         UI.insertarPresupuesto(presupuesto);
+    }
+}
+
+function eliminaPresupuesto(e) {
+    e.preventDefault();
+    if(confirm('¿Está seguro de eliminar todos los datos?')){
+        localStorage.removeItem('presupuesto');
+        window.location.reload();
     }
 }
 
