@@ -37,7 +37,6 @@ class Presupuesto {
     nuevoGasto(gasto) {
         this.gastos.push(gasto);
         this.restante -= gasto.cantidad;
-        console.log(this);
         this.save();
     }
 
