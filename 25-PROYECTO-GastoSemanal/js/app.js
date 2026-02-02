@@ -37,10 +37,12 @@ class Presupuesto {
     }
 
     nuevoGasto(gasto) {
+        if(gasto.cantidad > this.restante) return false;
         this.gastos.push(gasto);
         // this.restante -= gasto.cantidad; // Solución mía
         this.calcularRestante();
         this.save();
+        return true;
     }
 
     eliminarGasto(id) {
@@ -237,10 +239,13 @@ function agregarGasto(e) {
     }
     // Generar un objeto con el gasto
     const gasto = { nombre, cantidad, id: Date.now() };
-    presupuesto.nuevoGasto(gasto);
-    UI.imprimirAlerta('Gasto agregado Correctamente', 'correcto');
-    // Imprimir los gastos
-    UI.insertarPresupuesto( presupuesto );
+    if(presupuesto.nuevoGasto(gasto)) {
+        UI.imprimirAlerta('Gasto agregado Correctamente', 'correcto');
+        // Imprimir los gastos
+        UI.insertarPresupuesto( presupuesto );
+    } else {
+        UI.imprimirAlerta('El gasto excede el presupuesto', 'error');
+    }
     $formulario.reset();
     $gasto.focus(); // Lleva el cursor a la celda gasto, para facilitar la entrada
 }
