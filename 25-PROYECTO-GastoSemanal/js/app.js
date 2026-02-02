@@ -66,6 +66,17 @@ class Presupuesto {
         // De momento solo se guarda en localStorage
         localStorage.setItem( 'presupuesto', JSON.stringify(this) );
     }
+
+    static restore() {
+        let presupuestoAlmacenado = JSON.parse(localStorage.getItem('presupuesto'));
+        if(presupuestoAlmacenado) {
+            // Si hay datos guardados en localStorage, devolvemos un objeto Presupuesto
+            return new Presupuesto(presupuestoAlmacenado);
+        } else {
+            // Si no hay datos, devolvemos una cadena vacía
+            return '';
+        }
+    }
 }
 
 class UI {
@@ -174,9 +185,10 @@ class UI {
 // Funciones
 
 function preguntarPresupuesto() {
-    let presupuestoUsuario = JSON.parse(localStorage.getItem('presupuesto'));
+    let presupuestoUsuario;
+    presupuesto = Presupuesto.restore();
     
-    if(!presupuestoUsuario){
+    if(!presupuesto){
 
         presupuestoUsuario = prompt('¿Cuál es tu presupuesto?');
         
@@ -184,10 +196,8 @@ function preguntarPresupuesto() {
             window.location.reload();
             return;
         }
+        presupuesto = new Presupuesto(presupuestoUsuario);
     }
-    
-    
-    presupuesto = new Presupuesto(presupuestoUsuario);
     UI.insertarPresupuesto(presupuesto);
 }
 
@@ -237,4 +247,5 @@ function agregarGasto(e) {
     // Imprimir los gastos
     UI.insertarPresupuesto( presupuesto );
     $formulario.reset();
+    $gasto.focus();
 }
