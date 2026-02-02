@@ -29,11 +29,11 @@ class Presupuesto {
             this.restante = presupuesto.restante;
             this.gastos = presupuesto.gastos;
         }
-        
     }
 
     get gastado() {
-        return this.presupuesto - this.restante;
+        // return this.presupuesto - this.restante;
+        return this.gastos.reduce( (total, gasto) => total + gasto.cantidad, 0);
     }
 
     nuevoGasto(gasto) {
@@ -43,9 +43,17 @@ class Presupuesto {
         this.save();
     }
 
+    eliminarGasto(id) {
+        console.log('Vamos a eliminar el gasto con id', id);
+        // $this.gastos = $this.gastos.filter();
+        this.gastos = this.gastos.filter( gasto => gasto.id !== id);
+        this.calcularRestante();
+        this.save();
+    }
+
     calcularRestante() {
-        const gastado = this.gastos.reduce( (total, gasto) => total + gasto.cantidad, 0);
-        this.restante = this.presupuesto - gastado;
+        // const gastado = this.gastos.reduce( (total, gasto) => total + gasto.cantidad, 0);
+        this.restante = this.presupuesto - this.gastado;
     }
 
     aumentaPresupuesto(cantidad) {
@@ -62,17 +70,43 @@ class Presupuesto {
 
 class UI {
     static $primario = document.querySelector('.primario');
-    static $gastoListado = document.querySelector('#gastos ul');
+    static $listadoGastos = document.querySelector('#gastos ul');
     static $total = document.querySelector('#total');
     static $gastado = document.querySelector('#gastado');
     static $restante = document.querySelector('#restante');
 
-    static insertarPresupuesto( cantidad ) {
-        const { presupuesto, gastado, restante, gastos } = cantidad;
+    static insertarPresupuesto( presupuestoObj ) {
+        const { presupuesto, gastado, restante, gastos } = presupuestoObj;
         UI.$total.textContent = moneda(presupuesto);
         UI.$gastado.textContent = moneda(gastado);
         UI.$restante.textContent = moneda(restante);
-        UI.agregarListadoGastos(gastos);
+        UI.agregarListadoGastos(presupuestoObj);
+        UI.comprobarPresupuesto(presupuestoObj);
+    }
+
+    static comprobarPresupuesto(presupuestoObj) {
+        const { presupuesto, restante } = presupuestoObj;
+        const $restanteDiv = UI.$restante.parentElement.parentElement;
+        if( (presupuesto / 4) > restante ) {
+            $restanteDiv.classList.remove('alert-success', 'alert-warning');
+            $restanteDiv.classList.add('alert-danger');
+        } else if( (presupuesto / 2) > restante ){
+            $restanteDiv.classList.remove('alert-success', 'alert-danger');
+            $restanteDiv.classList.add('alert-warning');
+        } 
+        else {
+            $restanteDiv.classList.add('alert-success');
+            $restanteDiv.classList.remove('alert-danger', 'alert-warning');
+        }
+        // Si el total es 0 o menor
+        const $submit = $formulario.querySelector('button[type="submit"]');
+        
+        if(restante <= 0) {
+            UI.imprimirAlerta('El presupuesto se ha agotado', 'error');
+            $submit.disabled = true;
+        } else {
+            $submit.disabled = false;
+        }
     }
     
     static imprimirAlerta(mensaje, tipo) {
@@ -97,7 +131,8 @@ class UI {
         }, 3000);
     }
 
-    static agregarListadoGastos( gastos ) {
+    static agregarListadoGastos( presupuesto ) {
+        const { gastos } = presupuesto;
         UI.limpiarListado();
         // Iterar sobre los gastos
         gastos.forEach(gasto => {
@@ -115,26 +150,24 @@ class UI {
             const btnBorrar = document.createElement('BUTTON');
             btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
             btnBorrar.innerHTML = 'Borrar &times;';
+            btnBorrar.onclick = () => {
+                presupuesto.eliminarGasto(id);
+                UI.insertarPresupuesto(presupuesto);
+            }
             nuevoGasto.appendChild(btnBorrar);
 
             // Agregar al HTML
-            UI.$gastoListado.appendChild(nuevoGasto);
+            UI.$listadoGastos.appendChild(nuevoGasto);
         });
     }
 
     static limpiarListado() {
-        while(UI.$gastoListado.firstChild) {
-            UI.$gastoListado.removeChild( UI.$gastoListado.firstChild );
+        while(UI.$listadoGastos.firstChild) {
+            UI.$listadoGastos.removeChild( UI.$listadoGastos.firstChild );
         }
     }
 }
-function limpiarHTML() {
-    // Forma lenta
-    // contenedorCarrito.innerHTML = '';
-    while(contenedorCarrito.firstChild) {
-        contenedorCarrito.removeChild( contenedorCarrito.firstChild );
-    }
-}
+
 // Instanciar
 // const ui = new UI();
 
@@ -201,7 +234,7 @@ function agregarGasto(e) {
     const gasto = { nombre, cantidad, id: Date.now() };
     presupuesto.nuevoGasto(gasto);
     UI.imprimirAlerta('Gasto agregado Correctamente', 'correcto');
-    // Imprimir los castos
+    // Imprimir los gastos
     UI.insertarPresupuesto( presupuesto );
     $formulario.reset();
 }
