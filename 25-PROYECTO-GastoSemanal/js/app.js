@@ -44,15 +44,12 @@ class Presupuesto {
     }
 
     eliminarGasto(id) {
-        console.log('Vamos a eliminar el gasto con id', id);
-        // $this.gastos = $this.gastos.filter();
         this.gastos = this.gastos.filter( gasto => gasto.id !== id);
         this.calcularRestante();
         this.save();
     }
 
     calcularRestante() {
-        // const gastado = this.gastos.reduce( (total, gasto) => total + gasto.cantidad, 0);
         this.restante = this.presupuesto - this.gastado;
     }
 
@@ -179,8 +176,6 @@ class UI {
     }
 }
 
-// Instanciar
-// const ui = new UI();
 
 // Funciones
 
@@ -247,5 +242,5 @@ function agregarGasto(e) {
     // Imprimir los gastos
     UI.insertarPresupuesto( presupuesto );
     $formulario.reset();
-    $gasto.focus();
+    $gasto.focus(); // Lleva el cursor a la celda gasto, para facilitar la entrada
 }
