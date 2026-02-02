@@ -2,8 +2,6 @@
 const $formulario = document.querySelector('#agregar-gasto'),      
       $gasto = document.querySelector('#gasto'),
       $cantidad = document.querySelector('#cantidad'),
-      $total = document.querySelector('#total'),
-      $restante = document.querySelector('#restante'),
       $add = document.querySelector('#add'),
       $reset = document.querySelector('button[type="reset"]');
 
@@ -34,10 +32,20 @@ class Presupuesto {
         
     }
 
+    get gastado() {
+        return this.presupuesto - this.restante;
+    }
+
     nuevoGasto(gasto) {
         this.gastos.push(gasto);
-        this.restante -= gasto.cantidad;
+        // this.restante -= gasto.cantidad; // Solución mía
+        this.calcularRestante();
         this.save();
+    }
+
+    calcularRestante() {
+        const gastado = this.gastos.reduce( (total, gasto) => total + gasto.cantidad, 0);
+        this.restante = this.presupuesto - gastado;
     }
 
     aumentaPresupuesto(cantidad) {
@@ -55,11 +63,15 @@ class Presupuesto {
 class UI {
     static $primario = document.querySelector('.primario');
     static $gastoListado = document.querySelector('#gastos ul');
+    static $total = document.querySelector('#total');
+    static $gastado = document.querySelector('#gastado');
+    static $restante = document.querySelector('#restante');
 
     static insertarPresupuesto( cantidad ) {
-        const { presupuesto, restante, gastos } = cantidad;
-        $total.textContent = moneda(presupuesto);
-        $restante.textContent = moneda(restante);
+        const { presupuesto, gastado, restante, gastos } = cantidad;
+        UI.$total.textContent = moneda(presupuesto);
+        UI.$gastado.textContent = moneda(gastado);
+        UI.$restante.textContent = moneda(restante);
         UI.agregarListadoGastos(gastos);
     }
     
