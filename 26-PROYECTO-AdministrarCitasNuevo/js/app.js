@@ -46,9 +46,8 @@ function submitCita(e) {
         tipo: 'exito'
     });
     citas.agregar(citaObj);
+    $formulario.reset();
     vaciarCitaObj();
-    console.log(citas);
-    console.log(citaObj);
 }
 
 function vaciarCitaObj() {
@@ -103,8 +102,8 @@ class AdminCitas {
         this.citas = [];
     }
 
-    agregar(cita) {
-        this.citas = [...this.citas, {...cita}];
+    agregar({...cita}) {
+        this.citas = [...this.citas, cita];
         this.mostrar();
     }
 
