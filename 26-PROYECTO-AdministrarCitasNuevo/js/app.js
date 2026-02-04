@@ -99,11 +99,12 @@ class Notificacion {
 
 class AdminCitas {
     constructor() {
-        this.citas = [];
+        this.restore();
     }
 
     agregar({...cita}) {
         this.citas = [...this.citas, cita];
+        this.save();
         this.mostrar();
     }
 
@@ -148,6 +149,24 @@ class AdminCitas {
     limpiarHTML() {
         while($contenedorCitas.firstChild) {
             $contenedorCitas.removeChild($contenedorCitas.firstChild);
+        }
+    }
+
+    save() {
+        // De momento solo se guarda en localStorage
+        localStorage.setItem( 'citas', JSON.stringify(this.citas) );
+    }
+
+    restore() {
+        let citas = JSON.parse(localStorage.getItem('citas'));
+        
+        if(citas) {
+            // Si hay datos guardados en localStorage, asignamos el valor y llamamos a mostrar
+            this.citas = citas;
+            this.mostrar();
+        } else {
+            // Si no hay datos, asignamos un array vacío
+            this.citas = [];
         }
     }
 }
