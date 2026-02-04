@@ -11,7 +11,7 @@ $formulario.reset();
 
 
 // Objeto de cita
-const citaObj = {
+let citaObj = {
     paciente: '',
     propietario: '',
     email: '',
@@ -84,10 +84,17 @@ class Notificacion {
 class AdminCitas {
     constructor() {
         this.restore();
+        this.edicion = false;
     }
 
     agregar({...cita}) {
-        this.citas = [...this.citas, cita];
+        if(this.edicion) {
+            // Si estamos en modo edición, el objeto cita ya se ha actualizado, por lo que no se añade
+            this.edicion = false;
+        } else {
+            this.citas = [...this.citas, cita];
+        }
+        
         this.save();
         this.mostrar();
     }
@@ -193,5 +200,12 @@ function submitCita(e) {
 }
 
 function cargarEdicion(cita) {
-    console.log(cita);
+    
+    citaObj = cita;
+    citas.edicion = true;
+    $pacienteInput.value = cita.paciente;
+    $propietarioInput.value = cita.propietario;
+    $emailInput.value = cita.email;
+    $fechaInput.value = cita.fecha;
+    $sintomasInput.value = cita.sintomas;
 }
