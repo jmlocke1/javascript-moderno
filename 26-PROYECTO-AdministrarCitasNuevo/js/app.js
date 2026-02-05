@@ -5,8 +5,6 @@ const $emailInput = document.querySelector('#email');
 const $fechaInput = document.querySelector('#fecha');
 const $sintomasInput = document.querySelector('#sintomas');
 const $formulario = document.querySelector('#formulario-cita');
-const $formularioSubmit = document.querySelector('#formulario-cita input[type="submit"]');
-const $contenedorCitas = document.querySelector('#citas');
 
 $formulario.reset();
 
@@ -251,8 +249,8 @@ class AdminCitas {
  * Inicializamos el objeto AdminCitas inyectándole los elementos del DOM que utiliza internamente
  */
 const citas = new AdminCitas({
-    formularioSubmit: $formularioSubmit,
-    contenedorCitas: $contenedorCitas
+    formularioSubmit: document.querySelector('#formulario-cita input[type="submit"]'),
+    contenedorCitas: document.querySelector('#citas')
 });
 
 function submitCita(e) {
