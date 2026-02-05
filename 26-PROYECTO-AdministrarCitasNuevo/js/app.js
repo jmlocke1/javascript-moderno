@@ -8,9 +8,6 @@ const $formulario = document.querySelector('#formulario-cita');
 
 $formulario.reset();
 
-
-
-
 // Eventos
 $pacienteInput.addEventListener('input', datosCita);
 $propietarioInput.addEventListener('input', datosCita);
@@ -20,13 +17,9 @@ $sintomasInput.addEventListener('input', datosCita);
 $formulario.addEventListener('submit', submitCita);
 
 
-
 function datosCita(e) {
     citaObj[e.target.id] = e.target.value;
 }
-
-
-
 
 function vaciarCitaObj() {
     citaObj = new CitaObj();
