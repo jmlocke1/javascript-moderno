@@ -11,8 +11,7 @@ const $contenedorCitas = document.querySelector('#citas');
 $formulario.reset();
 
 
-// Objeto de cita
-let citaObj = nuevaCitaObj();
+
 
 // Eventos
 $pacienteInput.addEventListener('input', datosCita);
@@ -28,20 +27,11 @@ function datosCita(e) {
     citaObj[e.target.id] = e.target.value;
 }
 
-function nuevaCitaObj() {
-    return {
-        id: generarId(),
-        paciente: '',
-        propietario: '',
-        email: '',
-        fecha: '',
-        sintomas: ''
-    }
-}
+
 
 
 function vaciarCitaObj() {
-    citaObj = nuevaCitaObj();
+    citaObj = new CitaObj();
 }
 
 class Notificacion {
@@ -85,20 +75,84 @@ class Notificacion {
     }
 }
 
+class CitaObj {
+    constructor(cita = null) {
+        if(cita) {
+            this.id = cita.id;
+            this.paciente = cita.paciente;
+            this.propietario = cita.propietario;
+            this.email = cita.email;
+            this.fecha = cita.fecha;
+            this.sintomas = cita.sintomas;
+        } else {
+            this.id = generarId();
+            this.paciente = '';
+            this.propietario = '';
+            this.email = '';
+            this.fecha = '';
+            this.sintomas = '';
+        }
+        
+    }
+
+    validate() {
+        if(Object.values(this).some(valor => valor.trim() === '')) {
+            new Notificacion({
+                texto: 'Todos los campos son obligatorios',
+                tipo: 'error'
+            });
+            return false;
+        }
+        return true;
+    }
+}
+
 class AdminCitas {
-    constructor() {
+    #edicion;
+    /**
+     * 
+     * @param {*} Elementos del DOM en los que se insertan nuevos nodos 
+     */
+    constructor({formularioSubmit, contenedorCitas}) {
+        this.$formularioSubmit = formularioSubmit;
+        this.$contenedorCitas = contenedorCitas;
         this.restore();
         this.edicion = false;
     }
 
-    agregar({...cita}) {
-        if(this.edicion) {
-            // Si estamos en modo edición, el objeto cita ya se ha actualizado, por lo que no se añade
-            this.edicion = false;
-        } else {
-            this.citas = [...this.citas, cita];
+    set edicion(valor) {
+        if(typeof valor === typeof true) {
+            this.#edicion = valor;
         }
-        
+        if(this.#edicion){
+            // Estamos editando
+            this.$formularioSubmit.value = "Guardar Cambios";
+        } else {
+            // Si es false, estamos guardando un nuevo paciente
+            this.$formularioSubmit.value = 'Registrar Paciente';
+        }
+    }
+
+    get edicion() {
+        return this.#edicion;
+    }
+ 
+    agregar(citaNueva) {
+        if(this.edicion) {
+            this.edicion = false;
+            this.citas = this.citas.map( cita => citaNueva.id === cita.id ? citaNueva : cita);
+            new Notificacion({
+                texto: 'Paciente actualizado correctamente',
+                tipo: 'exito'
+            });
+            
+        } else {
+            this.citas = [...this.citas, citaNueva];
+            new Notificacion({
+                texto: 'Paciente registrado correctamente',
+                tipo: 'exito'
+            });
+        }
         this.save();
         this.mostrar();
     }
@@ -111,7 +165,7 @@ class AdminCitas {
 
     mostrar() {
         if(this.citas.length === 0) {
-            $contenedorCitas.innerHTML = '<p class="text-xl mt-5 mb-10 text-center">No Hay Pacientes</p>';
+            this.$contenedorCitas.innerHTML = '<p class="text-xl mt-5 mb-10 text-center">No Hay Pacientes</p>';
             return;
         }
         this.limpiarHTML();
@@ -165,13 +219,13 @@ class AdminCitas {
             divCita.appendChild(fecha);
             divCita.appendChild(sintomas);
             divCita.appendChild(contenedorBotones);
-            $contenedorCitas.appendChild(divCita);
+            this.$contenedorCitas.appendChild(divCita);
         });    
     }
 
     limpiarHTML() {
-        while($contenedorCitas.firstChild) {
-            $contenedorCitas.removeChild($contenedorCitas.firstChild);
+        while(this.$contenedorCitas.firstChild) {
+            this.$contenedorCitas.removeChild(this.$contenedorCitas.firstChild);
         }
     }
 
@@ -193,31 +247,19 @@ class AdminCitas {
         }
     }
 }
-
-const citas = new AdminCitas();
+/**
+ * Inicializamos el objeto AdminCitas inyectándole los elementos del DOM que utiliza internamente
+ */
+const citas = new AdminCitas({
+    formularioSubmit: $formularioSubmit,
+    contenedorCitas: $contenedorCitas
+});
 
 function submitCita(e) {
     e.preventDefault();
-    if(Object.values(citaObj).some(valor => valor.trim() === '')) {
-        new Notificacion({
-            texto: 'Todos los campos son obligatorios',
-            tipo: 'error'
-        });
-        return;
-    }
-    // Mostramos el mensaje en función de si estamos editando o añadiendo uno nuevo
-    if(citas.edicion) { // Estamos editando un registro
-        new Notificacion({
-            texto: 'Paciente actualizado correctamente',
-            tipo: 'exito'
-        });
-        $formularioSubmit.value = 'Registrar Paciente';
-    } else {    // Estamos añadiendo un nuevo registro
-        new Notificacion({
-            texto: 'Paciente registrado correctamente',
-            tipo: 'exito'
-        });
-    }
+    if(!citaObj.validate()) return;
+
+   
     citas.agregar(citaObj);
     $formulario.reset();
     vaciarCitaObj();
@@ -228,12 +270,16 @@ function generarId() {
 }
 
 function cargarEdicion(cita) {
-    citaObj = cita;
+    citaObj = new CitaObj(cita);
     citas.edicion = true;
-    $formularioSubmit.value = "Guardar Cambios";
+   
     $pacienteInput.value = cita.paciente;
     $propietarioInput.value = cita.propietario;
     $emailInput.value = cita.email;
     $fechaInput.value = cita.fecha;
     $sintomasInput.value = cita.sintomas;
 }
+
+
+// Objeto de cita
+let citaObj = new CitaObj();
