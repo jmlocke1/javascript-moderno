@@ -110,6 +110,10 @@ class AdminCitas {
     }
 
     mostrar() {
+        if(this.citas.length === 0) {
+            $contenedorCitas.innerHTML = '<p class="text-xl mt-5 mb-10 text-center">No Hay Pacientes</p>';
+            return;
+        }
         this.limpiarHTML();
 
         // Generando las citas
@@ -150,7 +154,7 @@ class AdminCitas {
             const contenedorBotones = document.createElement('DIV');
             contenedorBotones.classList.add('flex', 'justify-around', 'mt-10');
             btnEditar.onclick = () => cargarEdicion(cita);
-            btnEliminar.onclick = () => eliminarCita(cita.id);
+            btnEliminar.onclick = () => this.eliminar(cita.id);
             contenedorBotones.appendChild(btnEditar);
             contenedorBotones.appendChild(btnEliminar);
 
@@ -232,8 +236,4 @@ function cargarEdicion(cita) {
     $emailInput.value = cita.email;
     $fechaInput.value = cita.fecha;
     $sintomasInput.value = cita.sintomas;
-}
-
-function eliminarCita(id) {
-    citas.eliminar(id);
 }
