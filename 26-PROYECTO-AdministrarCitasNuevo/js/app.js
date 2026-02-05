@@ -12,14 +12,7 @@ $formulario.reset();
 
 
 // Objeto de cita
-let citaObj = {
-    id: generarId(),
-    paciente: '',
-    propietario: '',
-    email: '',
-    fecha: '',
-    sintomas: ''
-}
+let citaObj = nuevaCitaObj();
 
 // Eventos
 $pacienteInput.addEventListener('input', datosCita);
@@ -35,9 +28,8 @@ function datosCita(e) {
     citaObj[e.target.id] = e.target.value;
 }
 
-
-function vaciarCitaObj() {
-    citaObj = {
+function nuevaCitaObj() {
+    return {
         id: generarId(),
         paciente: '',
         propietario: '',
@@ -45,6 +37,11 @@ function vaciarCitaObj() {
         fecha: '',
         sintomas: ''
     }
+}
+
+
+function vaciarCitaObj() {
+    citaObj = nuevaCitaObj();
 }
 
 class Notificacion {
@@ -106,6 +103,12 @@ class AdminCitas {
         this.mostrar();
     }
 
+    eliminar(id) {
+        this.citas = this.citas.filter( cita => cita.id !== id);
+        this.save();
+        this.mostrar();
+    }
+
     mostrar() {
         this.limpiarHTML();
 
@@ -147,6 +150,7 @@ class AdminCitas {
             const contenedorBotones = document.createElement('DIV');
             contenedorBotones.classList.add('flex', 'justify-around', 'mt-10');
             btnEditar.onclick = () => cargarEdicion(cita);
+            btnEliminar.onclick = () => eliminarCita(cita.id);
             contenedorBotones.appendChild(btnEditar);
             contenedorBotones.appendChild(btnEliminar);
 
@@ -228,4 +232,8 @@ function cargarEdicion(cita) {
     $emailInput.value = cita.email;
     $fechaInput.value = cita.fecha;
     $sintomasInput.value = cita.sintomas;
+}
+
+function eliminarCita(id) {
+    citas.eliminar(id);
 }
