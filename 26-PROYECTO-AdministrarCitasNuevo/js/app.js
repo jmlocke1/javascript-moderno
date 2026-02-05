@@ -5,6 +5,7 @@ const $emailInput = document.querySelector('#email');
 const $fechaInput = document.querySelector('#fecha');
 const $sintomasInput = document.querySelector('#sintomas');
 const $formulario = document.querySelector('#formulario-cita');
+const $formularioSubmit = document.querySelector('#formulario-cita input[type="submit"]');
 const $contenedorCitas = document.querySelector('#citas');
 
 $formulario.reset();
@@ -12,6 +13,7 @@ $formulario.reset();
 
 // Objeto de cita
 let citaObj = {
+    id: generarId(),
     paciente: '',
     propietario: '',
     email: '',
@@ -35,8 +37,13 @@ function datosCita(e) {
 
 
 function vaciarCitaObj() {
-    for(let clave in citaObj) {
-        citaObj[clave] = '';
+    citaObj = {
+        id: generarId(),
+        paciente: '',
+        propietario: '',
+        email: '',
+        fecha: '',
+        sintomas: ''
     }
 }
 
@@ -190,19 +197,32 @@ function submitCita(e) {
         });
         return;
     }
-    new Notificacion({
-        texto: 'Paciente registrado correctamente',
-        tipo: 'exito'
-    });
+    // Mostramos el mensaje en función de si estamos editando o añadiendo uno nuevo
+    if(citas.edicion) { // Estamos editando un registro
+        new Notificacion({
+            texto: 'Paciente actualizado correctamente',
+            tipo: 'exito'
+        });
+        $formularioSubmit.value = 'Registrar Paciente';
+    } else {    // Estamos añadiendo un nuevo registro
+        new Notificacion({
+            texto: 'Paciente registrado correctamente',
+            tipo: 'exito'
+        });
+    }
     citas.agregar(citaObj);
     $formulario.reset();
     vaciarCitaObj();
 }
 
+function generarId() {
+    return Math.random().toString(36).substring(2) + Date.now();
+}
+
 function cargarEdicion(cita) {
-    
     citaObj = cita;
     citas.edicion = true;
+    $formularioSubmit.value = "Guardar Cambios";
     $pacienteInput.value = cita.paciente;
     $propietarioInput.value = cita.propietario;
     $emailInput.value = cita.email;
