@@ -7,7 +7,10 @@ const cliente = {
 }
 
 weakset.add(cliente);
-const nombre = 20;
-weakset.add(nombre);
+// Los WeakSet solo pueden almacenar objetos. Lo siguiente dará error
+// const nombre = 20;
+// weakset.add(nombre);
 
+// console.log(weakset.has(cliente));
+console.log(weakset.size)
 console.log(weakset);
