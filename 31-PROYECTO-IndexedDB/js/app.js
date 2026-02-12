@@ -1,4 +1,4 @@
-
+let DB;
 const mascotaInput = document.querySelector('#mascota');
 const propietarioInput = document.querySelector('#propietario');
 const telefonoInput = document.querySelector('#telefono');
@@ -19,6 +19,11 @@ const heading = document.querySelector('#administra');
 
 let editando = false;
 
+window.onload = () => {
+    eventListeners();
+
+    crearDB();
+}
 
 // Eventos
 eventListeners();
@@ -42,7 +47,6 @@ const citaObj = {
 
 
 function datosCita(e) {
-    //  console.log(e.target.name) // Obtener el Input
      citaObj[e.target.name] = e.target.value;
 }
 
@@ -170,7 +174,7 @@ class UI {
 
 
 const administrarCitas = new Citas();
-console.log(administrarCitas);
+
 const ui = new UI(administrarCitas);
 
 function nuevaCita(e) {
@@ -196,7 +200,7 @@ function nuevaCita(e) {
         editando = false;
 
     } else {
-        // Nuevo Registrando
+        // Nuevo Registro
 
         // Generar un ID único
         citaObj.id = Date.now();
@@ -204,8 +208,20 @@ function nuevaCita(e) {
         // Añade la nueva cita
         administrarCitas.agregarCita({...citaObj});
 
-        // Mostrar mensaje de que todo esta bien...
-        ui.imprimirAlerta('Se agregó correctamente')
+        // Insertar Registro en IndexedDB
+        const transaction = DB.transaction(['citas'], 'readwrite');
+        // Habilitar el objectStore
+        const objectStore = transaction.objectStore('citas');
+        // Insertar en la BD
+        objectStore.add(citaObj);
+        transaction.oncomplete = function() {
+            console.log('Cita agregada');
+
+            // Mostrar mensaje de que todo esta bien...
+            ui.imprimirAlerta('Se agregó correctamente')
+        }
+
+        
     }
 
 
@@ -262,4 +278,41 @@ function cargarEdicion(cita) {
 
     editando = true;
 
+}
+
+function crearDB() {
+    // Crear la base de datos en version 1.0
+    const crearDB = window.indexedDB.open('citas', 1);
+
+    // Si hay un error
+    crearDB.onerror = function() {
+        console.log('Hubo un error');
+    }
+
+    // Si todo sale bien
+    crearDB.onsuccess = function() {
+        console.log('Base de datos creada');
+        DB = crearDB.result;
+        
+    }
+
+    // Definir el schema
+    crearDB.onupgradeneeded = function(e) {
+        const db = e.target.result;
+
+        const objectStore = db.createObjectStore('citas', {
+            keypath: 'id',
+            autoIncrement: true
+        });
+
+        // Definir todas las columnas
+        objectStore.createIndex('mascota', 'mascota', { unique: false });
+        objectStore.createIndex('propietario', 'propietario', { unique: false });
+        objectStore.createIndex('telefono', 'telefono', { unique: false });
+        objectStore.createIndex('fecha', 'fecha', { unique: false });
+        objectStore.createIndex('hora', 'hora', { unique: false });
+        objectStore.createIndex('sintomas', 'sintomas', { unique: false });
+        objectStore.createIndex('id', 'id', { unique: true });
+        console.log('DB creada y lista');
+    }
 }
