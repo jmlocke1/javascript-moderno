@@ -206,7 +206,7 @@ function nuevaCita(e) {
 
         return;
     }
-    console.log("Editando es: ", editando);
+    
     if(editando) {
         // Estamos editando
         administrarCitas.editarCita( {...citaObj} );
@@ -214,7 +214,6 @@ function nuevaCita(e) {
         // Edita en IndexDB
         const transaction = DB.transaction(['citas'], 'readwrite');
         const objectStore = transaction.objectStore('citas');
-        console.log(citaObj);
         objectStore.put(citaObj);
 
         transaction.oncomplete = () => {
@@ -277,9 +276,18 @@ function reiniciarObjeto() {
 
 
 function eliminarCita(id) {
-    administrarCitas.eliminarCita(id);
+    const transaction = DB.transaction(['citas'], 'readwrite');
+    const objectStore = transaction.objectStore('citas');
+    objectStore.delete(id);
+    
+    transaction.oncomplete = () => {
+        console.log(`Cita ${id} eliminada`);
+        ui.imprimirCitas();
+    }
 
-    ui.imprimirCitas()
+    transaction.onerror = () => {
+        console.log(`Hubo un error al borrar el registro ${id}`);
+    }
 }
 
 function cargarEdicion(cita) {
