@@ -206,7 +206,7 @@ function nuevaCita(e) {
 
         return;
     }
-
+    console.log("Editando es: ", editando);
     if(editando) {
         // Estamos editando
         administrarCitas.editarCita( {...citaObj} );
@@ -214,6 +214,7 @@ function nuevaCita(e) {
         // Edita en IndexDB
         const transaction = DB.transaction(['citas'], 'readwrite');
         const objectStore = transaction.objectStore('citas');
+        console.log(citaObj);
         objectStore.put(citaObj);
 
         transaction.oncomplete = () => {
@@ -225,11 +226,8 @@ function nuevaCita(e) {
         }
 
         transaction.onerror = () => {
-            console.log('Hubo un error');
+            console.log('Hubo un error al editar');
         }
-
-        
-
     } else {
         // Nuevo Registro
 
@@ -317,7 +315,7 @@ function crearDB() {
 
     // Si hay un error
     crearDB.onerror = function() {
-        console.log('Hubo un error');
+        console.log('Hubo un error al crear la base de datos');
     }
 
     // Si todo sale bien
@@ -334,7 +332,7 @@ function crearDB() {
         const db = e.target.result;
 
         const objectStore = db.createObjectStore('citas', {
-            keypath: 'id',
+            keyPath: 'id',
             autoIncrement: true
         });
 
