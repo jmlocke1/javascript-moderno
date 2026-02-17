@@ -31,11 +31,19 @@
 
         abrirConexion.onsuccess = function() {
             DB = abrirConexion.result;
+            gestionErroresDB();
             if(id) {
                 editarCliente(id);
             } else {
                 console.error('No se pudo obtener el id de la url');
             }
+        }
+    }
+
+    function gestionErroresDB() {
+        DB.onerror = e => {
+            // Control de errores genérico de la base de datos
+            console.error(`Error en la Base de Datos: ${e.target.error?.message}`);
         }
     }
 
@@ -79,6 +87,7 @@
             telefono: $telefono.value.trim(),
             empresa: $empresa.value.trim()
         }
+        
         for(let campo in clienteActualizado) {
             if(clienteActualizado[campo] === '') {
                 imprimirAlerta('Todos los campos son obligatorios', 'error');
