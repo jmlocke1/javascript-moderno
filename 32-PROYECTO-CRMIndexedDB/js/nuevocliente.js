@@ -57,10 +57,10 @@
         const transaction = DB.transaction('crm', 'readwrite');
         const objectStore = transaction.objectStore('crm');
         objectStore.add(cliente);
-        transaction.onerror = function(e) {
-            console.error(`Hubo un error al añadir el nuevo cliente: ${e.target.error.message}`);
-            imprimirAlerta(`Hubo un error al añadir el nuevo cliente: ${cliente.nombre}`, 'error');
-        }
+        // transaction.onerror = function(e) {
+        //     console.error(`Hubo un error al añadir el nuevo cliente: ${e.target.error.message}`);
+        //     imprimirAlerta(`Hubo un error al añadir el nuevo cliente: ${cliente.nombre}`, 'error');
+        // }
 
         transaction.oncomplete = function() {
             formulario.reset();
