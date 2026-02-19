@@ -2,7 +2,8 @@
     // Obtener la parte de parámetros de la URL actual
     const params = new URLSearchParams(window.location.search);
     const id = Number(params.get('id'));
-    let DB;
+    
+    let iteraciones = 0;
     const $nombre = document.querySelector('#nombre'),
           $email = document.querySelector('#email'),
           $telefono = document.querySelector('#telefono'),
@@ -15,6 +16,9 @@
     document.addEventListener('DOMContentLoaded', () => {
         conectarDB();
         $formulario.addEventListener('submit', validarCliente);
+        
+        
+        if(id) editarCliente(id);
         // if(id) {
         //     setTimeout(() => {
         //         editarCliente(id)
@@ -22,51 +26,34 @@
         // }
     });
 
-    function conectarDB() {
-        const abrirConexion = window.indexedDB.open('crm', 1);
+    
 
-        abrirConexion.onerror = function() {
-            console.error('Hubo un error al abrir la conexión en EditarCliente');
-        };
-
-        abrirConexion.onsuccess = function() {
-            DB = abrirConexion.result;
-            gestionErroresDB();
-            if(id) {
-                editarCliente(id);
-            } else {
-                console.error('No se pudo obtener el id de la url');
-            }
-        }
+function editarCliente(id) {
+    if(!DB) {
+        console.log("Aún no está la BD en la iteración ", iteraciones++);
+        setTimeout(() => {
+            editarCliente(id);
+        }, 5);
+        return;
     }
-
-    function gestionErroresDB() {
-        DB.onerror = e => {
-            // Control de errores genérico de la base de datos
-            console.error(`Error en la Base de Datos: ${e.target.error?.message}`);
-        }
+    const transaction = DB.transaction(['crm'], 'readonly');
+    const objectStore = transaction.objectStore('crm');
+    
+    // Obtener cliente con cursor
+    // const clienteRequest = objectStore.openCursor(id);
+    // clienteRequest.onsuccess = function(e) {
+    //     const cursor = e.target.result;
+    //     if(cursor) {
+    //         console.log(cursor.value);
+    //         cursor.continue();
+    //     }
+    // }
+    // Obtener cliente con get
+    const clienteGet = objectStore.get(id);
+    clienteGet.onsuccess = e => {
+        llenarFormulario(clienteGet.result);
     }
-
-    function editarCliente(id) {
-        const transaction = DB.transaction(['crm'], 'readonly');
-        const objectStore = transaction.objectStore('crm');
-        
-        // Obtener cliente con cursor
-        // const clienteRequest = objectStore.openCursor(id);
-        // clienteRequest.onsuccess = function(e) {
-        //     const cursor = e.target.result;
-        //     if(cursor) {
-        //         console.log(cursor.value);
-        //         cursor.continue();
-        //     }
-            
-        // }
-        // Obtener cliente con get
-        const clienteGet = objectStore.get(id);
-        clienteGet.onsuccess = e => {
-            llenarFormulario(clienteGet.result);
-        }
-    }
+}
 
     function llenarFormulario(cliente) {
         const {id, nombre, email, telefono, empresa} = cliente;
@@ -102,40 +89,12 @@
         const objectStore = transaction.objectStore('crm');
         objectStore.put(cliente);
         transaction.oncomplete = function() {
-            formulario.reset();
+            $formulario.reset();
             console.log('Cliente Actualizado');
             imprimirAlerta('Cliente Actualizado Correctamente', 'exito');
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 3000);
         }
-    }
-
-    
-
-    function imprimirAlerta(mensaje, tipo) {
-        // Elimina el mensaje anterior
-        const mensajesAnteriores = formulario.querySelectorAll(`.${tipo}`);
-        mensajesAnteriores.forEach(mensajeAnterior => {
-            if(mensajeAnterior.textContent === mensaje) {
-                mensajeAnterior.remove();
-            }
-        });
-        
-        // Crear la alerta
-        const divMensaje = document.createElement('DIV');
-        divMensaje.classList.add('px-4', 'py-3', 'rounded', 'max-w-lg', 'mx-auto', 'mt-6', 'text-center', 'border', tipo);
-        if(tipo === 'error') {
-            divMensaje.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-        } else {
-            divMensaje.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
-        }
-
-        divMensaje.textContent = mensaje;
-        formulario.appendChild(divMensaje);
-
-        setTimeout(() => {
-            divMensaje.remove();
-        }, 3000);
     }
 })();

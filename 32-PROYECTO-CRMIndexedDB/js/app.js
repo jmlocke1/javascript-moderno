@@ -62,10 +62,4 @@
             }
         }
     }
-
-    function limpiarClientes() {
-        console.log('Limpiando los clientes anteriores del listado')
-    }
-
-
 })();
