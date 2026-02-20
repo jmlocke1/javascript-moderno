@@ -1,9 +1,38 @@
 (function() {
     let DB;
-    const tabla = document.querySelector('#listado-clientes');
+    const $clientesHeader = document.querySelector('#mensajes');
+    const $listadoClientes = document.querySelector('#listado-clientes');
     document.addEventListener('DOMContentLoaded', () => {
         crearDB();
+
+        $listadoClientes.addEventListener('click', eliminarRegistro);
     });
+
+    function eliminarRegistro(e) {
+        if(e.target.classList.contains('eliminar')) {
+            const idEliminar = Number(e.target.dataset.cliente);
+            
+            const nombre = e.target.dataset.nombre;
+            const confirmacion = confirm(`¿Está seguro de borrar el cliente ${nombre}?`);
+            if(confirmacion) {
+                const transaction = DB.transaction(['crm'], 'readwrite');
+                const objectStore = transaction.objectStore('crm');
+
+                objectStore.delete(idEliminar);
+                
+                transaction.oncomplete = function() {
+                    imprimirAlerta(`El cliente ${nombre} ha sido eliminado`, 'exito', $clientesHeader);
+                    console.log('Eliminado el cliente', nombre);
+                    e.target.parentElement.parentElement.parentElement.remove();
+                }
+
+                transaction.onerror = function(e) {
+                    imprimirAlerta(`Error: ${e.target.error?.message}`, 'error', $clientesHeader);
+                }
+            } 
+        }
+        
+    }
 
     function crearDB() {
         const crearDB = window.indexedDB.open('crm', 1);
@@ -54,10 +83,10 @@
           </td>
           <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5">
               <p><a href="editar-cliente.html?id=${id}" class="text-teal-600 hover:text-teal-900 mr-5">Editar</a></p>
-              <p><a href="#" data-cliente="${id}" class="text-red-600 hover:text-red-900">Eliminar</a></p>
+              <p><a href="#" data-cliente="${id}" data-nombre="${nombre}" class="text-red-600 hover:text-red-900 eliminar">Eliminar</a></p>
           </td>
   `;
-                tabla.appendChild(tr);
+                $listadoClientes.appendChild(tr);
                 cursor.continue();
             }
         }

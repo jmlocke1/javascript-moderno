@@ -20,9 +20,9 @@ function gestionErroresDB() {
     }
 }
 
-function imprimirAlerta(mensaje, tipo) {
+function imprimirAlerta(mensaje, tipo, elemento = $formulario) {
     // Elimina el mensaje anterior
-    const mensajesAnteriores = $formulario.querySelectorAll(`.${tipo}`);
+    const mensajesAnteriores = elemento.querySelectorAll(`.${tipo}`);
     mensajesAnteriores.forEach(mensajeAnterior => {
         if(mensajeAnterior.textContent === mensaje) {
             mensajeAnterior.remove();
@@ -39,7 +39,7 @@ function imprimirAlerta(mensaje, tipo) {
     }
 
     divMensaje.textContent = mensaje;
-    $formulario.appendChild(divMensaje);
+    elemento.appendChild(divMensaje);
 
     setTimeout(() => {
         divMensaje.remove();
