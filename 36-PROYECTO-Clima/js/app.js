@@ -3,6 +3,7 @@ const $resultado = document.querySelector('#resultado');
 const $formulario = document.querySelector('#formulario');
 const $ciudad = document.querySelector('#ciudad');
 const $pais = document.querySelector('#pais');
+import { apiId } from "./config.js";
 
 window.addEventListener('load', () => {
     $formulario.addEventListener('submit', buscarClima);
@@ -20,6 +21,7 @@ function buscarClima(e) {
     }
 
     // Consultar la API
+    consultarAPI(ciudad, pais);
 }
 
 function mostrarError(mensaje) {
@@ -45,4 +47,9 @@ function mostrarError(mensaje) {
     setTimeout(() => {
         alerta.remove();
     }, 5000);
+}
+
+function consultarAPI(ciudad, pais) {
+    console.log(apiId);
+
 }
