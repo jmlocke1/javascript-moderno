@@ -5,6 +5,7 @@ function iniciarApp() {
     const modal = new bootstrap.Modal('#modal', {});
     const $modalTitle = document.querySelector('.modal .modal-title');
     const $modalBody = document.querySelector('.modal .modal-body');
+    const $modalFooter = document.querySelector('.modal-footer');
 
     obtenerCategorias();
 
@@ -121,6 +122,22 @@ function iniciarApp() {
         }
 
         $modalBody.appendChild(listGroup);
+
+        // Botones de cerrar y favorito
+        limpiarHTML($modalFooter);
+        const btnFavorito = document.createElement('BUTTON');
+        btnFavorito.classList.add('btn', 'btn-danger', 'col');
+        btnFavorito.textContent = 'Guardar Favorito';
+
+        const btnCerraModal = document.createElement('BUTTON');
+        btnCerraModal.classList.add('btn', 'btn-secondary', 'col');
+        btnCerraModal.textContent = 'Cerrar';
+        btnCerraModal.onclick = function() {
+            modal.hide();
+        }
+
+        $modalFooter.appendChild(btnFavorito);
+        $modalFooter.appendChild(btnCerraModal);
 
         // Muestra el modal
         modal.show();
