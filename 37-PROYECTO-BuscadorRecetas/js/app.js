@@ -6,7 +6,7 @@ function iniciarApp() {
     const $modalTitle = document.querySelector('.modal .modal-title');
     const $modalBody = document.querySelector('.modal .modal-body');
     const $modalFooter = document.querySelector('.modal-footer');
-
+    
     obtenerCategorias();
 
     function obtenerCategorias() {
@@ -127,14 +127,27 @@ function iniciarApp() {
         limpiarHTML($modalFooter);
         const btnFavorito = document.createElement('BUTTON');
         btnFavorito.classList.add('btn', 'btn-danger', 'col');
-        btnFavorito.textContent = 'Guardar Favorito';
+        btnFavorito.textContent = existeFavorito(idMeal) ? 'Eliminar Favorito' : 'Guardar Favorito';
+
+        // Localstorage
+        btnFavorito.onclick = function() {
+            if(!existeFavorito(idMeal)) {
+                    agregarFavorito({
+                    id: idMeal,
+                    tittle: strMeal,
+                    img: strMealThumb
+                });
+            } else {
+                eliminarFavorito(idMeal);
+            }
+        };
 
         const btnCerraModal = document.createElement('BUTTON');
         btnCerraModal.classList.add('btn', 'btn-secondary', 'col');
         btnCerraModal.textContent = 'Cerrar';
         btnCerraModal.onclick = function() {
             modal.hide();
-        }
+        };
 
         $modalFooter.appendChild(btnFavorito);
         $modalFooter.appendChild(btnCerraModal);
@@ -147,6 +160,30 @@ function iniciarApp() {
         while(selector.firstChild) {
             selector.removeChild(selector.firstChild);
         }
+    }
+
+    function recuperaFavoritos() {
+        return JSON.parse(localStorage.getItem('recetasFavoritas')) ?? [];
+    }
+
+    function guardaFavoritos(nuevosFavoritos) {
+        localStorage.setItem('recetasFavoritas', JSON.stringify(nuevosFavoritos));
+    }
+
+    function agregarFavorito(receta) {
+        const favoritos = recuperaFavoritos();
+        guardaFavoritos(JSON.stringify([...favoritos, receta]));
+    }
+
+    function eliminarFavorito(id) {
+        const favoritos = recuperaFavoritos();
+        const nuevosFavoritos = favoritos.filter(favorito => favorito.id !== id);
+        guardaFavoritos(nuevosFavoritos);
+    }
+
+    function existeFavorito(id) {
+        const favoritos = recuperaFavoritos();
+        return favoritos.some( favorito => favorito.id === id);
     }
 }
 
