@@ -1,7 +1,8 @@
 const $resultado = document.querySelector('#resultado');
 const $formulario = document.querySelector('#formulario');
 const $terminoBusqueda = document.querySelector('#termino');
-import { apiKey, urlApi } from "./config.js";
+import { apiKey, urlApi, registrosPorPagina } from "./config.js";
+let totalPaginas;
 
 window.onload = () => {
     formulario.addEventListener('submit', validarFormulario);
@@ -38,10 +39,12 @@ function mostrarAlerta(mensaje) {
 }
 
 function buscarImagenes(termino) {
-    const url = `${urlApi}?key=${apiKey}&q=${termino}`;
+    const url = `${urlApi}?key=${apiKey}&q=${termino}&per_page=${registrosPorPagina}`;
     fetch(url)
         .then(respuesta => respuesta.json())
         .then(resultado => {
+            totalPaginas = calcularPaginas(resultado.totalHits);
+            console.log(totalPaginas);
             mostrarImagenes(resultado.hits);
         });
 }
@@ -87,6 +90,10 @@ function titlePhoto(imagen) {
     // Primer carácter en mayúscula
     titulo = titulo[0].toUpperCase() + titulo.substring(1)
     return titulo;
+}
+
+function calcularPaginas(total) {
+    return Math.ceil( total / registrosPorPagina );
 }
 
 function limpiarHTML(elemento) {
