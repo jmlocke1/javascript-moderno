@@ -1,0 +1,1 @@
+export const apiKey = 'Tu API Key de Pixabay';
