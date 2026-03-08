@@ -137,8 +137,13 @@ function iniciarApp() {
                     tittle: strMeal,
                     img: strMealThumb
                 });
+                btnFavorito.textContent = 'Eliminar Favorito';
             } else {
-                eliminarFavorito(idMeal);
+                if(confirm(`¿Desea eliminar el plato ${strMeal}?`)) {
+                    eliminarFavorito(idMeal);
+                    btnFavorito.textContent = 'Guardar Favorito';
+                }
+                
             }
         };
 
@@ -172,7 +177,7 @@ function iniciarApp() {
 
     function agregarFavorito(receta) {
         const favoritos = recuperaFavoritos();
-        guardaFavoritos(JSON.stringify([...favoritos, receta]));
+        guardaFavoritos([...favoritos, receta]);
     }
 
     function eliminarFavorito(id) {
@@ -183,6 +188,7 @@ function iniciarApp() {
 
     function existeFavorito(id) {
         const favoritos = recuperaFavoritos();
+        console.log(favoritos);
         return favoritos.some( favorito => favorito.id === id);
     }
 }
