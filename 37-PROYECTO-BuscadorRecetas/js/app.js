@@ -1,13 +1,20 @@
 function iniciarApp() {
     const $selectCategorias = document.querySelector('#categorias');
-    $selectCategorias.addEventListener('change', seleccionarCategoria);
+    if($selectCategorias) {
+        $selectCategorias.addEventListener('change', seleccionarCategoria);
+        obtenerCategorias();
+    }
     const $resultado = document.querySelector('#resultado');
     const modal = new bootstrap.Modal('#modal', {});
     const $modalTitle = document.querySelector('.modal .modal-title');
     const $modalBody = document.querySelector('.modal .modal-body');
     const $modalFooter = document.querySelector('.modal-footer');
+    const $favoritosDiv = document.querySelector('.favoritos');
+    if($favoritosDiv) {
+        obtenerFavoritos();
+    }
     
-    obtenerCategorias();
+    
 
     function obtenerCategorias() {
         const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
@@ -45,7 +52,9 @@ function iniciarApp() {
 
         // Iterar en los resultados
         recetas.forEach(receta => {
-            const { idMeal, strMeal, strMealThumb } = receta;
+            const idMeal = receta.idMeal ?? receta.id;
+            const strMeal = receta.strMeal ?? receta.title;
+            const strMealThumb = receta.strMealThumb ?? receta.img;
             const recetaContenedor = document.createElement('DIV');
             recetaContenedor.classList.add('col-md-4');
 
@@ -134,7 +143,7 @@ function iniciarApp() {
             if(!existeFavorito(idMeal)) {
                     agregarFavorito({
                     id: idMeal,
-                    tittle: strMeal,
+                    title: strMeal,
                     img: strMealThumb
                 });
                 btnFavorito.textContent = 'Eliminar Favorito';
@@ -145,7 +154,6 @@ function iniciarApp() {
                     btnFavorito.textContent = 'Guardar Favorito';
                     mostrarToast(`${strMeal} Eliminado correctamente`);
                 }
-                
             }
         };
 
@@ -161,6 +169,18 @@ function iniciarApp() {
 
         // Muestra el modal
         modal.show();
+    }
+
+    function obtenerFavoritos() {
+        const favoritos = recuperaFavoritos();
+        if(favoritos.length) {
+            mostrarRecetas(favoritos);
+            return;
+        }
+        const noFavoritos = document.createElement('P');
+        noFavoritos.textContent = 'No hay favoritos aún';
+        noFavoritos.classList.add('fs-4', 'text-center', 'font-bold', 'mt-5');
+        $favoritosDiv.appendChild(noFavoritos);
     }
 
     function limpiarHTML(selector) {
@@ -186,11 +206,13 @@ function iniciarApp() {
         const favoritos = recuperaFavoritos();
         const nuevosFavoritos = favoritos.filter(favorito => favorito.id !== id);
         guardaFavoritos(nuevosFavoritos);
+        // Comprobamos si estamos en la página de favoritos, para recargar o no
+        if($favoritosDiv) mostrarRecetas(nuevosFavoritos);
     }
 
     function existeFavorito(id) {
         const favoritos = recuperaFavoritos();
-        console.log(favoritos);
+        
         return favoritos.some( favorito => favorito.id === id);
     }
 
