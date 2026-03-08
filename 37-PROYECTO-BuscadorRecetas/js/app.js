@@ -200,6 +200,7 @@ function iniciarApp() {
     function agregarFavorito(receta) {
         const favoritos = recuperaFavoritos();
         guardaFavoritos([...favoritos, receta]);
+        if($favoritosDiv) mostrarRecetas(recuperaFavoritos());
     }
 
     function eliminarFavorito(id) {
