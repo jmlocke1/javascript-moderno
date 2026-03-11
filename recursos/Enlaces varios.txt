@@ -2,3 +2,6 @@
     - Enlace a la API 1: https://www.themealdb.com/api/json/v1/1/categories.php
     - Enlace a la API 2: https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     - Enlace a la API 3: https://themealdb.com/api/json/v1/1/lookup.php?i=52772
+
+39 - Proyecto Criptomonedas
+    - API Legacy: https://developers.coindesk.com/documentation/legacy/Price/SingleSymbolPriceEndpoint

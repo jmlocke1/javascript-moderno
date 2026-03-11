@@ -1,0 +1,1 @@
+export const apiKey = 'Escribe aquí tu API Key';
