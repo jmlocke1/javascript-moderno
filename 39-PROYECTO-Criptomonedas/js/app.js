@@ -1,5 +1,6 @@
 import { apiKey } from "./config.js";
-const criptomonedasSelect = document.querySelector('#criptomonedas');
+const $criptomonedasSelect = document.querySelector('#criptomonedas'),
+      $formulario = document.querySelector('#formulario');
 
 // Crear un Promise
 const obtenerCriptomonedas = criptomonedas => new Promise( resolve => {
@@ -8,6 +9,7 @@ const obtenerCriptomonedas = criptomonedas => new Promise( resolve => {
 
 document.addEventListener('DOMContentLoaded', () => {
     consultarCriptomonedas();
+    $formulario.addEventListener('submit', submitFormulario);
 });
 
 function consultarCriptomonedas() {
@@ -16,5 +18,16 @@ function consultarCriptomonedas() {
     fetch(url)
         .then( respuesta => respuesta.json() )
         .then( resultado => obtenerCriptomonedas(resultado.Data) )
-        .then( criptomonedas => console.log(criptomonedas));
+        .then( criptomonedas => selectCriptomonedas(criptomonedas));
+}
+
+function selectCriptomonedas(criptomonedas) {
+    criptomonedas.forEach( cripto => {
+        const { FullName, Name } = cripto.CoinInfo;
+
+        const option = document.createElement('OPTION');
+        option.value = Name;
+        option.textContent = FullName;
+        $criptomonedasSelect.appendChild(option);
+    });
 }
