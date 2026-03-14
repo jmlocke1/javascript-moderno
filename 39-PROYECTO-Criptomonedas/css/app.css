@@ -24,6 +24,16 @@ h1::after {
     margin-top: 150px;
 }
 
+#resultado img {
+    margin: 0;
+    max-width: 25rem;
+}
+
+.criptoimagen {
+    width: 100%;
+    text-align: center;
+}
+
 label {
     color: white;
     text-transform: uppercase;
