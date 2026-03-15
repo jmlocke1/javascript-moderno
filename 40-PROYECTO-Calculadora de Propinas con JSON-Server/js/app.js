@@ -8,7 +8,8 @@ const $btnGuardarCliente = document.querySelector('#guardar-cliente'),
       $mesa = document.querySelector('#mesa'),
       $hora = document.querySelector('#hora'),
       $formulario = document.querySelector('#formulario')
-      $cuerpoFormulario = document.querySelector('.modal-body form');
+      $cuerpoFormulario = document.querySelector('.modal-body form'),
+      $seccionesOcultas = document.querySelectorAll('.d-none');
 const maxMesas = 8;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,7 +34,23 @@ function guardarCliente() {
     // Ocultar Modal
     const modalBootstrap = bootstrap.Modal.getInstance($formulario);
     modalBootstrap.hide();
-    console.log(cliente);
+    
+    // Mostrar las secciones
+    mostrarSecciones();
+
+    // Obtener platillos de la API de JSON-Server
+    obtenerPlatillos();
+}
+
+function mostrarSecciones() {
+    $seccionesOcultas.forEach(seccion => seccion.classList.remove('d-none'));
+}
+
+function obtenerPlatillos() {
+    const url = 'http://localhost:3000/platillos';
+
+    fetch(url)
+        .then( respuesta => console.log(respuesta))
 }
 
 function validarOrden(mesa, hora) {
