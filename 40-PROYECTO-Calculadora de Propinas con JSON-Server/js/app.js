@@ -1,9 +1,5 @@
-let cliente = {
-    mesa: '',
-    hora: '',
-    pedido: []
-}
 const $btnGuardarCliente = document.querySelector('#guardar-cliente'),
+      $alertasPlatillos = document.querySelector('#alertas-platillos');
       $nuevaOrden = document.querySelector('#nueva-orden'),
       $mesa = document.querySelector('#mesa'),
       $hora = document.querySelector('#hora'),
@@ -13,6 +9,17 @@ const $btnGuardarCliente = document.querySelector('#guardar-cliente'),
       $contenidoPlatillos = document.querySelector('#platillos .contenido');
 const maxMesas = 8;
 
+let cliente = {
+    mesa: '',
+    hora: '',
+    pedido: []
+};
+
+const categorias = {
+    1: 'Comida',
+    2: 'Bebidas',
+    3: 'Postres'
+};
 document.addEventListener('DOMContentLoaded', () => {
     $btnGuardarCliente.addEventListener('click', guardarCliente);
     $nuevaOrden.addEventListener('click', horaActual);
@@ -57,8 +64,10 @@ function obtenerPlatillos() {
 }
 
 function mostrarPlatillos(platillos) {
+    platillos.sort( (a, b) => a.categoria - b.categoria );
+    console.log(platillos);
     platillos.forEach( platillo => {
-        const { nombre, precio } = platillo;
+        const { id, nombre, precio, categoria } = platillo;
         const row = document.createElement('DIV');
         row.classList.add('row', 'py-3', 'border-top');
 
@@ -70,8 +79,30 @@ function mostrarPlatillos(platillos) {
         precioDiv.classList.add('col-md-3', 'fw-bold');
         precioDiv.textContent = `$${precio}`;
 
+        const categoriaDiv = document.createElement('DIV');
+        categoriaDiv.classList.add('col-md-3');
+        categoriaDiv.textContent = categorias[categoria];
+
+        const inputCantidad = document.createElement('INPUT');
+        inputCantidad.type = 'number';
+        inputCantidad.min = 0;
+        inputCantidad.value = 0;
+        inputCantidad.id = `producto-${id}`;
+        inputCantidad.classList.add('form-control');
+        inputCantidad.onchange = function() {
+            const cantidad = inputCantidad.value;
+            console.log(cantidad);
+            agregarPlatillo({platillo, inputCantidad});
+        }
+
+        const agregar = document.createElement('DIV');
+        agregar.classList.add('col-md-2');
+        agregar.appendChild(inputCantidad);
+        
         row.appendChild(nombreDiv);
         row.appendChild(precioDiv);
+        row.appendChild(categoriaDiv);
+        row.appendChild(agregar);
 
         $contenidoPlatillos.appendChild(row);
     });
@@ -108,4 +139,16 @@ function mostrarAlerta(mensaje, elemento = null) {
     setTimeout(() => {
         alerta.remove();
     }, 3000);
+}
+
+function agregarPlatillo(producto) {
+    const { inputCantidad, platillo: { id } } = producto;
+    const cantidad = parseInt( inputCantidad.value );
+    if(cantidad < 0) {
+        mostrarAlerta('No puede poner una cantidad negativa', $alertasPlatillos);
+        inputCantidad.value = 0;
+        return;
+    }
+    cliente.pedido[id] = cantidad;
+    console.log(cliente)
 }
