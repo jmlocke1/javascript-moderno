@@ -9,7 +9,8 @@ const $btnGuardarCliente = document.querySelector('#guardar-cliente'),
       $hora = document.querySelector('#hora'),
       $formulario = document.querySelector('#formulario')
       $cuerpoFormulario = document.querySelector('.modal-body form'),
-      $seccionesOcultas = document.querySelectorAll('.d-none');
+      $seccionesOcultas = document.querySelectorAll('.d-none'),
+      $contenidoPlatillos = document.querySelector('#platillos .contenido');
 const maxMesas = 8;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -50,7 +51,30 @@ function obtenerPlatillos() {
     const url = 'http://localhost:3000/platillos';
 
     fetch(url)
-        .then( respuesta => console.log(respuesta))
+        .then( respuesta => respuesta.json() )
+        .then( resultado => mostrarPlatillos(resultado))
+        .catch( error => console.error(error));
+}
+
+function mostrarPlatillos(platillos) {
+    platillos.forEach( platillo => {
+        const { nombre, precio } = platillo;
+        const row = document.createElement('DIV');
+        row.classList.add('row', 'py-3', 'border-top');
+
+        const nombreDiv = document.createElement('DIV');
+        nombreDiv.classList.add('col-md-4');
+        nombreDiv.textContent = nombre;
+
+        const precioDiv = document.createElement('DIV');
+        precioDiv.classList.add('col-md-3', 'fw-bold');
+        precioDiv.textContent = `$${precio}`;
+
+        row.appendChild(nombreDiv);
+        row.appendChild(precioDiv);
+
+        $contenidoPlatillos.appendChild(row);
+    });
 }
 
 function validarOrden(mesa, hora) {
@@ -61,11 +85,12 @@ function validarOrden(mesa, hora) {
         mostrarAlerta('Todos los campos son obligatorios', $cuerpoFormulario);
         validado = false;
     }
+
     // Comprobar el número de mesa
     const numMesa = $mesa.value;
     if(numMesa < 1 || numMesa > maxMesas) {
         mostrarAlerta(`El número de mesa debe estar entre 1 y ${maxMesas}`, $cuerpoFormulario);
-       validado = false;
+        validado = false;
     }
     return validado;
 }
