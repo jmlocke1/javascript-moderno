@@ -90,9 +90,8 @@ function mostrarPlatillos(platillos) {
         inputCantidad.id = `producto-${id}`;
         inputCantidad.classList.add('form-control');
         inputCantidad.onchange = function() {
-            const cantidad = inputCantidad.value;
-            console.log(cantidad);
-            agregarPlatillo({platillo, inputCantidad});
+            const cantidad = parseInt( inputCantidad.value );
+            agregarPlatillo({...platillo, cantidad}, inputCantidad);
         }
 
         const agregar = document.createElement('DIV');
@@ -141,14 +140,36 @@ function mostrarAlerta(mensaje, elemento = null) {
     }, 3000);
 }
 
-function agregarPlatillo(producto) {
-    const { inputCantidad, platillo: { id } } = producto;
-    const cantidad = parseInt( inputCantidad.value );
-    if(cantidad < 0) {
-        mostrarAlerta('No puede poner una cantidad negativa', $alertasPlatillos);
-        inputCantidad.value = 0;
-        return;
+function agregarPlatillo(producto, inputCantidad) {
+    const {  id, cantidad } = producto;
+    let pedido = structuredClone(cliente.pedido);
+
+    if(cantidad > 0) {
+        // Comprueba si un elemento ya existe en el array
+        if( pedido.some( articulo => articulo.id === id )) {
+            // El artículo ya existe, actualizar la cantidad
+            const pedidoActualizado = pedido.map( articulo => {
+                if(articulo.id === id) {
+                    articulo.cantidad = cantidad;
+                }
+                return articulo;
+            });
+            // Todavía no sé qué es mejor, si realizar una copia superficial con spread operator o asignarlo directamente
+            // cliente.pedido = [...pedidoActualizado];
+            cliente.pedido = pedidoActualizado;
+        } else {
+            // El artículo no existe, lo agregamos al array de pedido
+            cliente.pedido = [...pedido, producto];
+        }
+    } else {
+        // Elimina el producto del pedido
+        const resultado = pedido.filter( articulo => articulo.id !== id);
+        cliente.pedido = [...resultado];
     }
-    cliente.pedido[id] = cantidad;
-    console.log(cliente)
+    if(cantidad < 0) {
+        mostrarAlerta('No puede poner una cantidad negativa', inputCantidad.parentElement.parentElement);
+        inputCantidad.value = 0;
+    }
+    
+    
 }
