@@ -6,7 +6,8 @@ const $btnGuardarCliente = document.querySelector('#guardar-cliente'),
       $formulario = document.querySelector('#formulario')
       $cuerpoFormulario = document.querySelector('.modal-body form'),
       $seccionesOcultas = document.querySelectorAll('.d-none'),
-      $contenidoPlatillos = document.querySelector('#platillos .contenido');
+      $contenidoPlatillos = document.querySelector('#platillos .contenido'),
+      $resumenContenido = document.querySelector('#resumen .contenido');
 const maxMesas = 8;
 
 let cliente = {
@@ -171,5 +172,64 @@ function agregarPlatillo(producto, inputCantidad) {
         inputCantidad.value = 0;
     }
     
-    
+    // Limpiamos el HTML de contenido
+    limpiarHTML($resumenContenido);
+
+    // Mostrar el resumen
+    actualizarResumen();
+}
+
+function actualizarResumen() {
+    const contenido = document.querySelector('#resumen .contenido');
+    const resumen = document.createElement('DIV');
+    resumen.classList.add('col-md-6', 'card', 'py-5', 'px-3', 'shadow');
+
+    // Información de la mesa
+    const mesa = document.createElement('P');
+    mesa.textContent = 'Mesa ';
+    mesa.classList.add('fw-bold');
+
+    const mesaSpan = document.createElement('SPAN');
+    mesaSpan.textContent = cliente.mesa;
+    mesaSpan.classList.add('fw-normal');
+
+    // Información de la hora
+    const hora = document.createElement('P');
+    hora.textContent = 'Hora ';
+    hora.classList.add('fw-bold');
+
+    const horaSpan = document.createElement('SPAN');
+    horaSpan.textContent = cliente.hora;
+    horaSpan.classList.add('fw-normal');
+
+    // Agregar a sus elementos padre
+    mesa.appendChild(mesaSpan);
+    hora.appendChild(horaSpan);
+
+    // Título de la sección
+    const heading = document.createElement('H3');
+    heading.textContent = 'Platillos Consumidos';
+    heading.classList.add('my-4', 'text-center');
+
+    // Iterar sobre el array de pedidos
+    const grupo = document.createElement('UL');
+    grupo.classList.add('list-group');
+
+    const { pedido } = cliente;
+    pedido.forEach( articulo => {
+        console.log(articulo);
+    });
+
+    // Agregar al contenido
+    resumen.appendChild(mesa);
+    resumen.appendChild(hora);
+    resumen.appendChild(heading);
+
+    $resumenContenido.appendChild(resumen);
+}
+
+function limpiarHTML(elemento) {
+    while(elemento.firstChild) {
+        elemento.removeChild(elemento.firstChild);
+    }
 }
