@@ -87,7 +87,7 @@ function mostrarPlatillos(platillos) {
         const inputCantidad = document.createElement('INPUT');
         inputCantidad.type = 'number';
         inputCantidad.min = 0;
-        inputCantidad.value = obtenerCantidad(id);
+        inputCantidad.value = 0;
         inputCantidad.id = `producto-${id}`;
         inputCantidad.classList.add('form-control');
         inputCantidad.onchange = function() {
@@ -108,12 +108,6 @@ function mostrarPlatillos(platillos) {
     });
 }
 
-function obtenerCantidad(id) {
-    const { pedido } = cliente;
-    const producto = pedido?.find(producto => producto.id === id);
-    const cantidad = producto ? producto.cantidad : 0;
-    return cantidad;
-}
 
 function validarOrden(mesa, hora) {
     // Revisar si hay campos vacíos
@@ -320,6 +314,9 @@ function eliminarProducto(id) {
     cliente.pedido = [...resultado];
     limpiarHTML($resumenContenido);
     actualizarResumen();
-    limpiarHTML($contenidoPlatillos);
-    obtenerPlatillos();
+
+    // El producto se eliminó, por lo que regresamos la cantidad a 0 en el formulario
+    const productoEliminado = `#producto-${id}`;
+    const inputEliminado = document.querySelector(productoEliminado);
+    inputEliminado.value = 0;
 }
