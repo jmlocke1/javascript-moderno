@@ -337,8 +337,60 @@ function formularioPropinas() {
     heading.classList.add('my-4', 'text-center');
     heading.textContent = 'Propina';
 
+    // Radio Button 10%
+    
 
-    divFormulario.appendChild(heading)
+    // Agregarlo al Div Principal
+    divFormulario.appendChild(heading);
+    divFormulario.appendChild(createRadio("0"));
+    divFormulario.appendChild(createRadio("10"));
+    divFormulario.appendChild(createRadio("15"));
+    divFormulario.appendChild(createRadio("20"));
+    divFormulario.appendChild(createRadio("25"));
+
+    // Agregar al formulario
     formulario.appendChild(divFormulario);
     $resumenContenido.appendChild(formulario);
+}
+
+function createRadio(porcentaje) {
+    const radio = document.createElement('INPUT');
+    const radioName = `propina-${porcentaje}`;
+    radio.type = 'radio';
+    radio.name = 'propina';
+    radio.id = radioName;
+    radio.value = porcentaje;
+    radio.classList.add('form-check-input');
+    radio.onclick = calcularPropina;
+
+    const radioLabel = document.createElement('LABEL');
+    radioLabel.textContent = `${porcentaje}%`;
+    radioLabel.classList.add('form-check-label');
+    radioLabel.setAttribute('for', radioName);
+
+    const radioDiv = document.createElement('DIV');
+    radioDiv.classList.add('form-check');
+    radioDiv.appendChild(radio);
+    radioDiv.appendChild(radioLabel);
+
+    return radioDiv;
+}
+
+function calcularPropina() {
+    const { pedido } = cliente;
+    let subtotal = 0;
+
+    // Calcular el subtotal a pagar
+    pedido.forEach( articulo => {
+        subtotal += articulo.cantidad * articulo.precio;
+    });
+
+    // Seleccionar el Radio Button con la propina del cliente
+    const propinaSeleccionada = parseInt(document.querySelector('[name="propina"]:checked').value) / 100;
+    
+    // Calcular la propina
+    // const propina = 
+    // Calcular el total a pagar
+    const totalAPagar = subtotal * (1 + propinaSeleccionada);
+    console.log(totalAPagar);
 }
