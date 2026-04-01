@@ -56,15 +56,18 @@ function mostrarSecciones() {
 }
 
 function obtenerPlatillos() {
-    const url = 'http://localhost:3000/platillos';
+    // const url = 'http://localhost:3000/platillos';
+    // Ruta relativa al archivo db.json para no necesitar un backend
+    const url = './db.json';
 
     fetch(url)
         .then( respuesta => respuesta.json() )
-        .then( resultado => mostrarPlatillos(resultado))
+        .then( resultado => mostrarPlatillos(resultado.platillos))
         .catch( error => console.error(error));
 }
 
 function mostrarPlatillos(platillos) {
+    console.log(platillos);
     platillos.sort( (a, b) => a.categoria - b.categoria );
     
     platillos.forEach( platillo => {
