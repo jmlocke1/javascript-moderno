@@ -1,0 +1,5 @@
+site_name: JavaScript Docs
+nav:
+  - Home: index.md
+  - About: about.md
+theme: readthedocs

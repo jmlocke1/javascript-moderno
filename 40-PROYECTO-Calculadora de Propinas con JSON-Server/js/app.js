@@ -330,15 +330,13 @@ function formularioPropinas() {
 
     const divFormulario = document.createElement('DIV');
     divFormulario.classList.add('card', 'py-2', 'px-3', 'shadow');
+    divFormulario.id = 'propinas';
     // Igualamos la altura
-    divFormulario.style.height = $resumenContenido.offsetHeight + 'px';
+    // divFormulario.style.height = $resumenContenido.offsetHeight + 'px';
 
     const heading = document.createElement('H3');
     heading.classList.add('my-4', 'text-center');
     heading.textContent = 'Propina';
-
-    // Radio Button 10%
-    
 
     // Agregarlo al Div Principal
     divFormulario.appendChild(heading);
@@ -389,8 +387,48 @@ function calcularPropina() {
     const propinaSeleccionada = parseInt(document.querySelector('[name="propina"]:checked').value) / 100;
     
     // Calcular la propina
-    // const propina = 
+    const propina = subtotal * propinaSeleccionada;
     // Calcular el total a pagar
-    const totalAPagar = subtotal * (1 + propinaSeleccionada);
-    console.log(totalAPagar);
+    const total = subtotal * (1 + propinaSeleccionada);
+    mostrarTotalHTML( subtotal, total, propina );
+}
+
+function mostrarTotalHTML( subtotal, total, propina ) {
+
+    // Eliminamos el total pagar antiguo, si existe
+    const totalPagarAntiguo = document.querySelector('.total-pagar');
+    if(totalPagarAntiguo) totalPagarAntiguo.remove();
+
+    const divTotales = document.createElement('DIV');
+    divTotales.classList.add('total-pagar', 'card', 'py-2', 'px-3', 'mt-2', 'shadow', 'bg-light');
+    divTotales.style.height = alturaTotales();
+    // Subtotal
+    
+
+    divTotales.appendChild(subtotalHTML( parseFloat(subtotal).toFixed(2), 'Subtotal Consumo'));
+    divTotales.appendChild(subtotalHTML( parseFloat(propina).toFixed(2), 'Propina'));
+    divTotales.appendChild(subtotalHTML( parseFloat(total).toFixed(2), 'Total a pagar'));
+
+    
+    const formulario = document.querySelector('.formulario');
+    formulario.appendChild(divTotales);
+}
+
+function subtotalHTML(cantidad, mensaje) {
+    const subtotalParrafo = document.createElement('P');
+    subtotalParrafo.classList.add('fs-4', 'fw-bold', 'mt-2');
+    subtotalParrafo.textContent = mensaje + ': ';
+
+    const subtotalSpan = document.createElement('SPAN');
+    subtotalSpan.classList.add('fw-normal');
+    subtotalSpan.textContent = `$${cantidad}`;
+
+    subtotalParrafo.appendChild(subtotalSpan);
+    return subtotalParrafo;
+}
+
+function alturaTotales() {
+    const alturaResumen = $resumenContenido.offsetHeight;
+    const alturaPropinas = $resumenContenido.querySelector('#propinas').offsetHeight;
+    return ( alturaResumen - alturaPropinas - 8) + 'px';
 }
