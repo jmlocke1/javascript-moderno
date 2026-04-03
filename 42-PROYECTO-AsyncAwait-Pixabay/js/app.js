@@ -43,16 +43,25 @@ function mostrarAlerta(mensaje) {
     }, 3000);
 }
 
-function buscarImagenes() {
+async function buscarImagenes() {
     const termino = $terminoBusqueda.value;
     const url = `${urlApi}?key=${apiKey}&q=${termino}&per_page=${registrosPorPagina}&page=${paginaActual}`;
-    fetch(url)
-        .then(respuesta => respuesta.json())
-        .then(resultado => {
-            totalPaginas = calcularPaginas(resultado.totalHits);
-            console.log('Total de páginas:',totalPaginas);
-            mostrarImagenes(resultado.hits);
-        });
+    // fetch(url)
+    //     .then(respuesta => respuesta.json())
+    //     .then(resultado => {
+    //         totalPaginas = calcularPaginas(resultado.totalHits);
+    //         console.log('Total de páginas:',totalPaginas);
+    //         mostrarImagenes(resultado.hits);
+    //     });
+    try {
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        totalPaginas = calcularPaginas(resultado.totalHits);
+        console.log('Total de páginas:',totalPaginas);
+        mostrarImagenes(resultado.hits);
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 
