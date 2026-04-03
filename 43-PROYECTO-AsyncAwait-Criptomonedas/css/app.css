@@ -20,7 +20,7 @@ h1::after {
     background-color: #66a2fe;
     display: block;
 }
-.container img {
+#cryptologos {
     margin-top: 150px;
 }
 
@@ -115,4 +115,8 @@ p.precio{
         -webkit-transform: scale(1.0);
         transform: scale(1.0);
     }
+}
+
+.criptoimagen {
+    margin-top: 0;
 }
