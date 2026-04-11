@@ -19,7 +19,7 @@ export const nuevoCliente = async cliente => {
 // Obtine todos los clientes
 export const obtenerClientes = async () => {
     try {
-        const resultado = await fetch(url);
+        const resultado = await fetch(url + '?_sort=nombre');
         const clientes = await resultado.json();
         return clientes;
     } catch (error) {
