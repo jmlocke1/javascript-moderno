@@ -1,25 +1,18 @@
 {
   "clientes": [
     {
-      "nombre": "jose",
+      "nombre": "José Miguel",
       "email": "jose@jose.com",
       "telefono": "666666666",
       "empresa": "Image Vision",
       "id": "JQ5Uii8T9ck"
     },
     {
-      "nombre": "Alejandra",
+      "nombre": "Alejandra Martín",
       "email": "alejandra@correo.com",
       "telefono": "1988273636",
       "empresa": "Image Vision",
       "id": "D6hA4PU4fcI"
-    },
-    {
-      "nombre": "Miguel",
-      "email": "miguel@correo.com",
-      "telefono": "78868387382",
-      "empresa": "Image Vision",
-      "id": "DvFw9VgigAA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

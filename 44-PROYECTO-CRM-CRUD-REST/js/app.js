@@ -1,4 +1,4 @@
-import { obtenerClientes } from "./API.js";
+import { obtenerClientes, obtenerCliente, eliminarCliente } from "./API.js";
 
 (function() {
     const listado = document.querySelector('#listado-clientes');
@@ -34,9 +34,17 @@ import { obtenerClientes } from "./API.js";
         });
     }
 
-    function confirmarEliminar(e) {
+    async function confirmarEliminar(e) {
+        if(!e.target.classList.contains('eliminar')) return;
+        
         const clienteId = e.target.dataset.cliente;
-
-        const confirmar = confirm('Deseas eliminar este registro')
+        const cliente = await obtenerCliente(clienteId);
+        const { nombre } = cliente;
+        
+        const confirmar = confirm(`¿Deseas eliminar el cliente ${nombre}?`);
+        if(confirmar) {
+            eliminarCliente(clienteId);
+            e.target.parentElement.parentElement.remove();
+        }
     }
 })();

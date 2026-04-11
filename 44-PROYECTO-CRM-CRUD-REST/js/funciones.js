@@ -1,4 +1,4 @@
-export function mostrarAlerta(mensaje) {
+export function mostrarAlerta(mensaje, $formulario) {
     const alerta = document.querySelector('.bg-red-100');
     if(!alerta) {
         const alerta = document.createElement('P');
@@ -7,10 +7,40 @@ export function mostrarAlerta(mensaje) {
             <strong class="font-bold">¡Error!</strong>
             <span class="block sm:inline">${mensaje}</span>
         `;
-        const formulario = document.querySelector('#formulario');
-        formulario.appendChild(alerta);
+        
+        $formulario.appendChild(alerta);
         setTimeout(() => {
             alerta.remove();
         }, 3000);
     }
+}
+
+export function validarCliente(e, $formulario) {
+    e.preventDefault();
+
+    const nombre = $formulario.querySelector('#nombre').value.trim();
+    const email = $formulario.querySelector('#email').value.trim();
+    const telefono = $formulario.querySelector('#telefono').value.trim();
+    const empresa = $formulario.querySelector('#empresa').value.trim();
+    const id = $formulario.querySelector('#id').value.trim();
+
+    const cliente = {
+        nombre,
+        email,
+        telefono,
+        empresa
+    }
+
+    
+
+    if(!validar(cliente)) {
+        mostrarAlerta('Todos los campos son obligatorios', $formulario);
+        return false;
+    }
+    id ? cliente.id = id : '';
+    return cliente;
+}
+
+function validar(obj) {
+    return Object.values(obj).every( input => input !== '')
 }
