@@ -1,17 +1,23 @@
+console.log('Primero');
 
-// New Binding
-function Auto(modelo, color) {
-    this.modelo = modelo;
-    this.color = color;
-}
+setTimeout(() => {
+    console.log('Segundo');
+}, 0);
 
-const auto = new Auto('Camaro', 'Negro');
-console.log(auto);
+console.log('Tercero');
 
-// Window Binding
-window.color = 'negro';
+setTimeout(() => {
+    console.log('Cuarto');
+}, 0);
+
+new Promise(function(resolve) {
+    resolve('Desconocido...')
+}).then(console.log);
+
+console.log('Último');
+
 function hola() {
-    console.log(color);
+    console.log('Hola');
 }
 
 hola();
