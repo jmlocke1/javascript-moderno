@@ -1,7 +1,8 @@
-const nombreCache = 'apv-v1';
+const nombreCache = 'apv-v6';
 const archivos = [
     '/',
-    'index.html',
+    '/index.html',
+    '/error.html',
     '/css/bootstrap.css',
     '/css/styles.css',
     '/js/app.js',
@@ -24,7 +25,17 @@ self.addEventListener('install', e => {
 // Activar el Service worker
 self.addEventListener('activate', e => {
     console.log('Service Worker Activado');
-    console.log(e);
+    
+    e.waitUntil(
+        caches.keys()
+            .then( keys => {
+                // console.log(keys);
+                return Promise.all(
+                    keys.filter( key => key !== nombreCache )
+                        .map( key => caches.delete(key)) // Borra las versiones anteriores
+                )
+            })
+    )
 });
 
 // Evento fetch para descargar archivos estáticos
@@ -33,8 +44,6 @@ self.addEventListener('fetch', e => {
 
     e.respondWith(
         caches.match(e.request)
-            .then( respuestaCache => {
-                return respuestaCache
-            })
+            .then( respuestaCache => respuestaCache ? respuestaCache : caches.match('/error.html'))
     )
 });
