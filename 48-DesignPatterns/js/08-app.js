@@ -10,7 +10,7 @@ Vendedor.prototype = {
         console.log(`Tenemos el siguiente artículo: ${articulo}, iniciamos con un precio de ${precio}`);
     },
     vendido: comprador => {
-        console.log(`Vendido a ${comprador}`);
+        console.log(`Vendido a ${comprador.nombre}`);
     }
 }
 
@@ -36,6 +36,12 @@ function Subasta() {
     }
 }
 
+Subasta.prototype = {
+    obtenerCompradores: () => {
+        return this.compradores;
+    }
+}
+
 // Crear objetos
 const juan = new Comprador('Juan');
 const pablo = new Comprador('Pablo');
@@ -46,7 +52,8 @@ const subasta = new Subasta();
 subasta.registrar(juan);
 subasta.registrar(pablo);
 subasta.registrar(vendedor);
-
+console.log(subasta);
+console.log(subasta.obtenerCompradores);
 vendedor.oferta('Mustang 66', 300);
 
 juan.oferta(350, juan);
@@ -54,4 +61,4 @@ pablo.oferta(450, pablo);
 juan.oferta(500, juan);
 pablo.oferta(700, pablo);
 
-vendedor.vendido('Pablo');
+vendedor.vendido(pablo);
