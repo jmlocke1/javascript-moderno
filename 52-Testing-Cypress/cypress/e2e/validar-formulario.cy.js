@@ -2,7 +2,7 @@
 
 describe('Valida el formulario', () => {
     it('Submit al formulario y mostrar la alerta de error', () => {
-        cy.visit('https://javascript-moderno.test/52-Testing-Cypress/');
+        cy.visit('/');
 
         cy.get('[data-cy="formulario"]')
             .submit();

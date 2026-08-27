@@ -2,7 +2,7 @@
 
 describe('Carga la página principal', () => {
     it('Carga la página principal', () => {
-        cy.visit('https://javascript-moderno.test/52-Testing-Cypress/');
+        cy.visit('/');
 
         // Verificar el elemento y su texto
         cy.contains('[data-cy="titulo-proyecto"]', 'Administrador de Pacientes de Veterinaria');
