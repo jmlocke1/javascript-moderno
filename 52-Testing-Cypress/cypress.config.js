@@ -7,6 +7,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: 'https://javascript-moderno.test/52-Testing-Cypress/'
+    baseUrl: 'https://javascript-moderno.test/52-Testing-Cypress/',
+    testIsolation: false
   },
 });

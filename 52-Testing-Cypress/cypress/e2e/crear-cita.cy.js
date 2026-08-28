@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-describe('Valida el formulario', () => {
-    it('Submit al formulario y mostrar la alerta de error', () => {
+describe('Llena los campos para una nueva cita y la muestra', () => {
+    it('Campos nueva cita', () => {
         cy.visit('/');
 
         cy.get('[data-cy=mascota-input')
@@ -35,6 +35,5 @@ describe('Valida el formulario', () => {
         cy.get('[data-cy="citas-heading"]')
             .invoke('text')
             .should('equal', 'Administra tus Citas');
-
     });
 });
