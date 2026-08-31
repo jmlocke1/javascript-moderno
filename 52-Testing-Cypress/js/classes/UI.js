@@ -27,7 +27,7 @@ class UI {
         // Quitar el alert despues de 3 segundos
         setTimeout( () => {
             divMensaje.remove();
-        }, 30000);
+        }, 3000);
     }
 
     removePrevious(mensaje, tipo) {
