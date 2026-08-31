@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Llena los campos para una nueva cita y la edita', () => {
+describe('Llena los campos para una nueva cita y la elimina', () => {
     it('Campos nueva cita', () => {
         cy.visit('/');
 
@@ -72,18 +72,13 @@ describe('Llena los campos para una nueva cita y la edita', () => {
             .should('equal', 'Administra tus Citas');
     });
 
-    it('Edita la cita', () => {
-        cy.get('[data-cy=btn-editar0]').click();
-
-        cy.get('[data-cy=mascota-input]')
-            .clear()
-            .type('Nuevo Hook');
-
-        cy.get('[data-cy=submit-cita]')
+    it('Eliminar una cita', () => {
+        cy.get('[data-cy=btn-eliminar0]')
             .click();
-        
-        cy.get('[data-cy=alerta2]')
+        cy.get('[data-cy=btn-eliminar0]')
+            .click();
+        cy.get('[data-cy="citas-heading"]')
             .invoke('text')
-            .should('equal', 'Editado Correctamente');
+            .should('equal', 'No hay Citas, comienza creando una');
     });
 });

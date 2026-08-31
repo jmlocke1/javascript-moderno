@@ -9,11 +9,11 @@ describe('Valida el formulario', () => {
         
         
         // Seleccionar la alerta
-        cy.get('[data-cy=alerta]')
+        cy.get('[data-cy=alerta0]')
             .invoke('text')
             .should('equal', 'Todos los campos son Obligatorios');
 
-        cy.get('[data-cy=alerta]')
+        cy.get('[data-cy=alerta0]')
             .should('have.class', 'alert-danger');
     });
 });

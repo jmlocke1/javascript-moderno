@@ -25,11 +25,11 @@ describe('Llena los campos para una nueva cita y la muestra', () => {
         cy.get('[data-cy=submit-cita')
             .click();
         
-        cy.get('[data-cy=alerta]')
+        cy.get('[data-cy=alerta0]')
             .invoke('text')
             .should('equal', 'Se agregó correctamente');
         
-        cy.get('[data-cy=alerta]')
+        cy.get('[data-cy=alerta0]')
             .should('have.class', 'alert-success');
         
         cy.get('[data-cy="citas-heading"]')

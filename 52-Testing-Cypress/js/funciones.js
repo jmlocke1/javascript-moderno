@@ -94,7 +94,8 @@ export function reiniciarObjeto() {
 export function eliminarCita(id) {
     administrarCitas.eliminarCita(id);
 
-    ui.imprimirCitas(administrarCitas)
+    ui.imprimirAlerta(`Se eliminó correctamente la alerta con id ${id}`);
+    ui.imprimirCitas(administrarCitas);
 }
 
 export function cargarEdicion(cita) {
