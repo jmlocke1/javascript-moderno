@@ -5,6 +5,12 @@ const router = express.Router();
 router.get('/', (req, res) => {
     res.render('inicio');
 });
+router.get('/viajes', (req, res) => {
+    res.render('viajes');
+});
+router.get('/testimoniales', (req, res) => {
+    res.render('testimoniales');
+});
 router.get('/nosotros', (req, res) => {
 
     const viajes = 'Viaje a Alemania';
