@@ -18,7 +18,7 @@ router.get('/testimoniales', (req, res) => {
     });
 });
 router.get('/nosotros', (req, res) => {
-
+    
     res.render('nosotros', {
         pagina: 'Nosotros'
     });
