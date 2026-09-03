@@ -3,7 +3,9 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('inicio');
+    res.render('inicio', {
+        pagina: 'Inicios'
+    });
 });
 router.get('/viajes', (req, res) => {
     res.render('viajes');
