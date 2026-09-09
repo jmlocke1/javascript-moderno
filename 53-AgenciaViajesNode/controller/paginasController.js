@@ -16,6 +16,22 @@ const paginaViajes = async (req, res) => {
     });
 }
 
+// Muestra un viaje por su slug
+const paginaDetalleViaje = async (req, res) => {
+    const { slug } = req.params;
+
+    try {
+        const viaje = await Viaje.findOne({ where : { slug }});
+
+        res.render('viaje', {
+            pagina: 'Información Viaje',
+            viaje
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const paginaTestimoniales = (req, res) => {
     res.render('testimoniales', {
         pagina: 'Testimoniales'
@@ -34,5 +50,6 @@ export {
     paginaInicio,
     paginaViajes,
     paginaTestimoniales,
-    paginaNosotros
+    paginaNosotros,
+    paginaDetalleViaje
 }
