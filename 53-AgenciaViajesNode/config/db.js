@@ -1,10 +1,10 @@
 import Sequelize from 'sequelize';
 import config from './configLocal.js';
-const { databaseName, databaseUser, databasePassword, host, port } = config;
+const { databaseName, databaseUser, databasePassword, host, portDB } = config;
 
 const db = new Sequelize(databaseName, databaseUser, databasePassword, {
     host,
-    port,
+    portDB,
     dialect: 'mysql',
     define: {
         timestamps: false

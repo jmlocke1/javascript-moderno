@@ -5,7 +5,8 @@ const config = {
     databasePassword: 'password',
     databaseName: 'Nombre BD',
     host: '127.0.0.1',
-    port: '3306'
+    port: '3307', 
+    portDB: '3306' // El puerto de la base de datos debe ser distinto que el del servidor
 }
 
 
