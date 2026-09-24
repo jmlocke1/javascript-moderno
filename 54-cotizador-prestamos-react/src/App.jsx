@@ -13,10 +13,17 @@ function App() {
     const [mensajeAlerta, setMensajeAlerta] = useState('');
     const [meses, setMeses] = useState(6);
     const [total, setTotal] = useState(0);
+    const [mensual, setMensual] = useState(0)
     
     useEffect(() => {
         setTotal(calcularTotalPagar(cantidad, meses));
+        
     }, [cantidad, meses]);
+
+    useEffect(() =>{
+        setMensual(total / meses);
+    }, [total]);
+    
     function handleChange(e) {
         setCantidad(parseInt(e.target.value));
     }
@@ -102,7 +109,7 @@ function App() {
 
                 <p className="text-xl text-gray-500 text-center font-bold">{meses} Meses</p>
                 <p className="text-xl text-gray-500 text-center font-bold">{formatearDinero(total)} Total a pagar</p>
-                <p className="text-xl text-gray-500 text-center font-bold">{formatearDinero(total / meses)} Mensuales</p>
+                <p className="text-xl text-gray-500 text-center font-bold">{formatearDinero(mensual)} Mensuales</p>
             </div>
         </div>
     )
