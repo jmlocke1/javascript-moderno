@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Header from "./components/Header"
 import Button from "./components/Button"
+import { formatearDinero } from "../helpers";
 
 function App() {
     const cantidadInicial = 10000;
@@ -71,7 +72,9 @@ function App() {
                 {mostrarAlerta && <span className="text2x1 py-2 px-4 border rounded bg-red-200 border-red-500 text-red-700">{mensajeAlerta}</span>}
             </p>
             
-            <p className="text-center my-10 text-5xl font-extrabold text-indigo-600">{ cantidad }</p>
+            <p className="text-center my-10 text-5xl font-extrabold text-indigo-600">
+                { formatearDinero(cantidad) }
+            </p>
         </div>
     )
 }
