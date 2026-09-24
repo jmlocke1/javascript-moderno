@@ -1,18 +1,22 @@
-import { useState } from "react"
+import { useState, useEffect, use } from "react"
 import Header from "./components/Header"
 import Button from "./components/Button"
-import { formatearDinero } from "../helpers";
+import { formatearDinero, calcularTotalPagar } from "../helpers";
 
 function App() {
-    const cantidadInicial = 10000;
     const MIN = 0;
     const MAX = 20000;
+    const cantidadInicial = MAX / 2;
     const STEP = 100;
     const [cantidad, setCantidad] = useState(cantidadInicial);
     const [mostrarAlerta, setMostrarAlerta] = useState(false);
     const [mensajeAlerta, setMensajeAlerta] = useState('');
     const [meses, setMeses] = useState(6);
+    const [total, setTotal] = useState(0);
     
+    useEffect(() => {
+        setTotal(calcularTotalPagar(cantidad, meses));
+    }, [cantidad, meses]);
     function handleChange(e) {
         setCantidad(parseInt(e.target.value));
     }
@@ -97,8 +101,8 @@ function App() {
                 </h2>
 
                 <p className="text-xl text-gray-500 text-center font-bold">{meses} Meses</p>
-                <p className="text-xl text-gray-500 text-center font-bold">Total a pagar</p>
-                <p className="text-xl text-gray-500 text-center font-bold">Mensuales</p>
+                <p className="text-xl text-gray-500 text-center font-bold">{formatearDinero(total)} Total a pagar</p>
+                <p className="text-xl text-gray-500 text-center font-bold">{formatearDinero(total / meses)} Mensuales</p>
             </div>
         </div>
     )
