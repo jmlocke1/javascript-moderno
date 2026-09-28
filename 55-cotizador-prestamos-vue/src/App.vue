@@ -8,9 +8,7 @@
     const cantidadInicial = MAX / 2
     const cantidad = ref(cantidadInicial);
     
-    function handleChange(e) {
-        cantidad.value = +e.target.value;
-    }
+    
 </script>
 
 <template>
@@ -21,11 +19,10 @@
             <input 
                 type="range"
                 class="w-full bg-gray-200 accent-lime-500 hover:accent-lime-600"
-                @input="handleChange"
                 :min="MIN"
                 :max="MAX"
-                :value="cantidad"
                 :step="STEP"
+                v-model.number="cantidad"
             >
             <p>{{cantidad}} €</p>
         </div>
