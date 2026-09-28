@@ -2,7 +2,7 @@
     const props = defineProps({
         operador: String
     });
-    console.log(props);
+    
 </script>
 
 <template>
