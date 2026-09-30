@@ -12,5 +12,5 @@ app.use("/", (req,res) => {
 });
 
 app.listen(portApp, () => {
-    console.log('Servidor funcionando en el puerto 4000');
+    console.log(`Servidor funcionando en el puerto: ${portApp}`);
 });
