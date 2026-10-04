@@ -14,7 +14,8 @@
 
 
     document.addEventListener('DOMContentLoaded', () => {
-        conectarDB();
+        //conectarDB();
+        
         $formulario.addEventListener('submit', validarCliente);
         
         

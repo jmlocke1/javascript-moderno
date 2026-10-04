@@ -1,6 +1,7 @@
 const $formulario = document.querySelector('#formulario');
-let DB;
+let DB = conectarDB;
 function conectarDB() {
+    let DB;
     const abrirConexion = window.indexedDB.open('crm', 1);
 
     abrirConexion.onerror = function() {
@@ -10,7 +11,9 @@ function conectarDB() {
     abrirConexion.onsuccess = function() {
         DB = abrirConexion.result;
         gestionErroresDB();
+        console.log('Conectada correctamente');
     }
+    return DB;
 }
 
 function gestionErroresDB() {
