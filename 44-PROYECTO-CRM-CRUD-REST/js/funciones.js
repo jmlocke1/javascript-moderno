@@ -22,7 +22,7 @@ export function validarCliente(e, $formulario) {
     const email = $formulario.querySelector('#email').value.trim();
     const telefono = $formulario.querySelector('#telefono').value.trim();
     const empresa = $formulario.querySelector('#empresa').value.trim();
-    const id = $formulario.querySelector('#id').value.trim();
+    const id = $formulario.querySelector('#id');
 
     const cliente = {
         nombre,
