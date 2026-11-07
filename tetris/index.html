@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tetris Mejorado</title>
+  <title>Tetris Pro</title>
   <style>
     * {
       margin: 0;
@@ -17,9 +17,8 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       padding: 10px;
     }
     
@@ -30,24 +29,42 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
-    #game-wrapper {
+    #game-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 15px;
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
     }
     
+    /* Panel Superior */
     #top-panel {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       background: rgba(0,0,0,0.3);
-      padding: 10px 15px;
+      padding: 12px 15px;
       border-radius: 10px;
       border: 2px solid #4e4e8a;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .left-panel {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+    
+    .right-panel {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+      justify-content: flex-end;
     }
     
     .next-piece-container {
@@ -72,6 +89,13 @@
       border-radius: 4px;
     }
     
+    #screen-size-display {
+      font-size: 0.8rem;
+      color: #888;
+      margin-left: 10px;
+    }
+    
+    /* Selector de Tamaño */
     #screen-selector {
       display: flex;
       gap: 8px;
@@ -81,6 +105,9 @@
       padding: 10px 15px;
       border-radius: 10px;
       border: 2px solid #4e4e8a;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
     }
     
     .size-btn {
@@ -105,6 +132,18 @@
       border-color: #ff6b6b;
     }
     
+    /* Contenedor del Juego */
+    #game-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 15px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      border: 2px solid #4e4e8a;
+    }
+    
     #game-canvas-container {
       position: relative;
       background: #0f0f1b;
@@ -117,35 +156,56 @@
       display: block;
     }
     
-    #ui-panel {
+    /* Marcadores a la derecha */
+    #stats-panel {
       display: flex;
+      flex-direction: column;
       gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
+      min-width: 120px;
     }
     
     .stat-box {
       background: rgba(0,0,0,0.3);
-      padding: 10px 15px;
-      border-radius: 6px;
+      padding: 12px 15px;
+      border-radius: 8px;
       border: 1px solid #4e4e8a;
-      min-width: 80px;
+      text-align: center;
     }
     
     .stat-label {
       font-size: 0.8rem;
       color: #aaa;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     
     .stat-value {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: bold;
       color: #ff6b6b;
     }
     
+    /* Botón de Iniciar Juego */
+    #start-btn {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      background: #4e4e8a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 10px 0;
+    }
+    
+    #start-btn:hover {
+      background: #6a6aa3;
+      transform: scale(1.05);
+    }
+    
+    /* Información de Controles */
     #controls-info {
-      margin-top: 15px;
+      margin-top: 10px;
       font-size: 0.85rem;
       color: #ccc;
       text-align: center;
@@ -155,6 +215,7 @@
       border: 1px solid #4e4e8a;
     }
     
+    /* Game Over */
     #game-over {
       position: absolute;
       top: 0;
@@ -198,13 +259,11 @@
       transform: scale(1.05);
     }
     
-    #screen-size-display {
-      font-size: 0.8rem;
-      color: #888;
-      text-align: right;
+    #hidden {
+      display: none !important;
     }
     
-    /* Animación para partículas */
+    /* Bloque individual para dibujar */
     @keyframes particle-fade {
       0% {
         opacity: 1;
@@ -220,17 +279,22 @@
 <body>
   <h1>🧱 Tetris Pro</h1>
   
-  <div id="game-wrapper">
+  <div id="game-container">
     <!-- Panel Superior -->
     <div id="top-panel">
-      <div class="next-piece-container">
-        <span class="next-piece-label">Siguiente</span>
-        <canvas id="next-canvas" width="60" height="60"></canvas>
+      <div class="left-panel">
+        <div class="next-piece-container">
+          <span class="next-piece-label">Siguiente</span>
+          <canvas id="next-canvas" width="60" height="60"></canvas>
+        </div>
+        <div id="screen-size-display">Tamaño: 420px × 560px</div>
       </div>
-      <div id="screen-size-display">Tamaño: 420px × 560px</div>
+      <div class="right-panel">
+        <button id="start-btn">▶️ INICIAR JUEGO</button>
+      </div>
     </div>
     
-    <!-- Selector de Tamaño de Pantalla -->
+    <!-- Selector de Tamaño -->
     <div id="screen-selector">
       <button class="size-btn" data-size="320">📱 Pequeño (320px)</button>
       <button class="size-btn active" data-size="420">📱 Mediano (420px)</button>
@@ -239,28 +303,30 @@
     </div>
     
     <!-- Contenedor del Juego -->
-    <div id="game-canvas-container">
-      <canvas id="game-canvas"></canvas>
-      <div id="game-over">
-        <h2>🎮 GAME OVER</h2>
-        <p>Puntaje Final: <span id="final-score">0</span></p>
-        <button onclick="resetGame()">🔄 Jugar de nuevo</button>
+    <div id="game-wrapper">
+      <div id="game-canvas-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="game-over">
+          <h2>🎮 GAME OVER</h2>
+          <p>Puntaje Final: <span id="final-score">0</span></p>
+          <button onclick="resetGame()">🔄 Jugar de nuevo</button>
+        </div>
       </div>
-    </div>
-    
-    <!-- Panel de Estadísticas -->
-    <div id="ui-panel">
-      <div class="stat-box">
-        <div class="stat-label">Puntaje</div>
-        <div class="stat-value" id="score">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Nivel</div>
-        <div class="stat-value" id="level">1</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Líneas</div>
-        <div class="stat-value" id="lines">0</div>
+      
+      <!-- Marcadores a la derecha -->
+      <div id="stats-panel">
+        <div class="stat-box">
+          <div class="stat-label">Puntaje</div>
+          <div class="stat-value" id="score">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Nivel</div>
+          <div class="stat-value" id="level">1</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Líneas</div>
+          <div class="stat-value" id="lines">0</div>
+        </div>
       </div>
     </div>
     
@@ -276,26 +342,26 @@
       defaultWidth: 420,
       defaultHeight: 560,
       sizes: {
-        '320': { width: 320, height: 480 },
-        '420': { width: 420, height: 560 },
-        '560': { width: 560, height: 720 },
-        '720': { width: 720, height: 880 }
+        '320': { width: 320, height: 480, scale: 1 },
+        '420': { width: 420, height: 560, scale: 1 },
+        '560': { width: 560, height: 720, scale: 1.2 },
+        '720': { width: 720, height: 880, scale: 1.4 }
       }
     };
 
     // Colores de Tetromínos
     const COLORS = [
       null,
-      '#FF0D72', // I
-      '#0DC2FF', // J
-      '#0DFF72', // L
-      '#F538FF', // O
-      '#FF8E0D', // S
-      '#FFE138', // T
-      '#3877FF', // Z
+      '#FF0D72', // I - Magenta
+      '#0DC2FF', // J - Cyan
+      '#0DFF72', // L - Green
+      '#F538FF', // O - Purple
+      '#FF8E0D', // S - Orange
+      '#FFE138', // T - Yellow
+      '#3877FF', // Z - Blue
     ];
 
-    // Formas de Tetromínos
+    // Formas de Tetromínos (escaladas para tamaño visible)
     const SHAPES = [
       [],
       [[0,0,0,0], [1,1,1,1], [0,0,0,0], [0,0,0,0]],
@@ -311,9 +377,10 @@
     let canvas, ctx, nextCanvas, nextCtx;
     let board, particles;
     let score, level, lines, gameOver, dropCounter, lastTime;
-    let dropInterval, currentSize;
+    let dropInterval, currentSize, blockScale;
     let player, nextPiece;
     let animationFrameId;
+    let isGameRunning = false;
 
     // Inicialización
     function init() {
@@ -323,26 +390,51 @@
       nextCtx = nextCanvas.getContext('2d');
       particles = [];
       
+      // Configurar tamaño inicial
+      setScreenSize('420');
+      
       // Listeners
       setupSizeButtons();
+      setupStartButton();
       
       // Eventos
       document.addEventListener('keydown', handleInput);
       window.addEventListener('resize', handleResize);
       
-      // Iniciar juego
-      startGame();
+      // Dibujar estado inicial (sin juego)
+      drawEmptyBoard();
     }
 
     function setupSizeButtons() {
       const buttons = document.querySelectorAll('.size-btn');
       buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-          document.querySelector('.size-btn.active').classList.remove('active');
-          btn.classList.add('active');
-          setScreenSize(parseInt(btn.dataset.size));
+          if (!isGameRunning) {
+            document.querySelector('.size-btn.active').classList.remove('active');
+            btn.classList.add('active');
+            setScreenSize(parseInt(btn.dataset.size));
+          }
         });
       });
+    }
+
+    function setupStartButton() {
+      document.getElementById('start-btn').addEventListener('click', startGame);
+    }
+
+    function startGame() {
+      if (!isGameRunning) {
+        isGameRunning = true;
+        document.getElementById('start-btn').remove();
+        document.getElementById('screen-selector').style.display = 'none';
+        document.getElementById('game-wrapper').style.display = 'flex';
+        playerReset();
+        lastTime = 0;
+        dropCounter = 0;
+        updateUI();
+        drawNextPiece();
+        animationFrameId = requestAnimationFrame(update);
+      }
     }
 
     function setScreenSize(sizeKey) {
@@ -353,21 +445,26 @@
         canvas.height = size.height;
         document.getElementById('screen-size-display').textContent = 
           `Tamaño: ${size.width}px × ${size.height}px`;
+        blockScale = size.scale || 1;
       }
     }
 
     function handleResize() {
-      const wrapper = document.getElementById('game-wrapper');
-      const maxAvailable = window.innerWidth * 0.95;
-      
-      if (currentSize && currentSize.width > maxAvailable) {
-        const newSize = CONFIG.sizes['320'];
-        setScreenSize('320');
+      if (isGameRunning && currentSize) {
+        const wrapper = document.getElementById('game-wrapper');
+        const maxAvailable = window.innerWidth * 0.95;
+        
+        if (currentSize.width > maxAvailable) {
+          const newSize = CONFIG.sizes['320'];
+          setScreenSize('320');
+          cancelAnimationFrame(animationFrameId);
+          resetGame();
+        }
       }
     }
 
     function handleInput(event) {
-      if (gameOver) return;
+      if (!isGameRunning || gameOver) return;
       
       switch(event.keyCode) {
         case 37: // Flecha izquierda
@@ -411,31 +508,60 @@
       return { matrix: createPiece(type), colorIndex: type };
     }
 
-    function drawBlock(x, y, colorIndex, ctx) {
+    // Dibujado
+    function drawBlock(x, y, colorIndex, blockScale) {
+      const size = 1 * blockScale;
       ctx.fillStyle = COLORS[colorIndex];
-      ctx.fillRect(x, y, 1, 1);
+      ctx.fillRect(x, y, size, size);
+      
+      // Brillo superior
+      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      ctx.fillRect(x, y, size, size * 0.2);
       
       // Borde interior
-      ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-      ctx.lineWidth = 0.05;
-      ctx.strokeRect(x, y, 1, 1);
+      ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+      ctx.lineWidth = 0.1;
+      ctx.strokeRect(x, y, size, size);
       
-      // Brillo
-      ctx.fillStyle = 'rgba(255,255,255,0.15)';
-      ctx.fillRect(x + 0.05, y + 0.05, 0.2, 0.2);
+      // Sombra
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      ctx.fillRect(x + size * 0.1, y + size * 0.8, size * 0.8, size * 0.2);
     }
 
-    function drawMatrix(matrix, offset, ctx) {
+    function drawMatrix(matrix, offset, ctx, blockScale) {
       matrix.forEach((row, y) => {
         row.forEach((value, x) => {
           if(value !== 0) {
-            drawBlock(x + offset.x, y + offset.y, value, ctx);
+            drawBlock(x + offset.x, y + offset.y, value, blockScale);
           }
         });
       });
     }
 
+    function drawEmptyBoard() {
+      ctx.fillStyle = '#0f0f1b';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Dibujar rejilla de fondo
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 0.1;
+      for(let x = 0; x < 12; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 20);
+        ctx.stroke();
+      }
+      for(let y = 0; y < 20; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(12, y);
+        ctx.stroke();
+      }
+    }
+
     function draw() {
+      if (!isGameRunning) return;
+      
       // Limpiar canvas
       ctx.fillStyle = '#0f0f1b';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -443,13 +569,13 @@
       // Dibujar tablero
       board.forEach((row, y) => {
         row.forEach((value, x) => {
-          if(value !== 0) drawBlock(x, y, value, ctx);
+          if(value !== 0) drawBlock(x, y, value, blockScale);
         });
       });
       
       // Dibujar pieza actual
       if (player.matrix) {
-        drawMatrix(player.matrix, player.pos, ctx);
+        drawMatrix(player.matrix, player.pos, ctx, blockScale);
       }
       
       // Dibujar partículas
@@ -460,10 +586,10 @@
     }
 
     function drawNextPiece() {
+      if (!nextPiece || !isGameRunning) return;
+      
       nextCtx.fillStyle = '#0f0f1b';
       nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
-      
-      if (!nextPiece || !nextPiece.matrix) return;
       
       const piece = nextPiece.matrix;
       const rows = piece.length;
@@ -471,7 +597,7 @@
       const offsetX = (nextCanvas.width / cols - cols) / 2;
       const offsetY = (nextCanvas.height / rows - rows) / 2;
       
-      drawMatrix(piece, {x: offsetX, y: offsetY}, nextCtx);
+      drawMatrix(piece, {x: offsetX, y: offsetY}, nextCtx, blockScale);
     }
 
     // Lógica de Colisión
@@ -586,7 +712,7 @@
 
     // Sistema de Partículas
     function createExplosion(rowY) {
-      const pieceCount = 5;
+      const pieceCount = 10;
       const colors = ['#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
       
       for(let i = 0; i < pieceCount; i++) {
@@ -674,21 +800,18 @@
       playerReset();
       updateUI();
       document.getElementById('game-over').style.display = 'none';
-      startGame();
-    }
-
-    function startGame() {
-      initBoard();
-      playerReset();
-      lastTime = 0;
-      dropCounter = 0;
-      updateUI();
-      animationFrameId = requestAnimationFrame(update);
+      isGameRunning = false;
+      
+      // Restaurar controles
+      document.getElementById('start-btn').style.display = 'inline-block';
+      document.getElementById('screen-selector').style.display = 'flex';
+      document.getElementById('game-wrapper').style.display = 'flex';
+      drawEmptyBoard();
     }
 
     // Game Loop
     function update(time = 0) {
-      if(gameOver) return;
+      if(gameOver || !isGameRunning) return;
       
       const deltaTime = time - lastTime;
       lastTime = time;
