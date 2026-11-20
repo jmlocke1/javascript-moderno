@@ -1,4 +1,5 @@
-import { pacienteInput, propietarioInput, emailInput, fechaInput, sintomasInput, formulario } from './selectores.js'
+import './style.css'
+import { pacienteInput, propietarioInput, emailInput, fechaInput, sintomasInput, formulario } from './selectores.ts'
 import { datosCita, submitCita } from './funciones.ts'
 
 // Eventos
