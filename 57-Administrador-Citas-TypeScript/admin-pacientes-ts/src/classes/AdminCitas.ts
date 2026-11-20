@@ -1,5 +1,5 @@
-import { contenedorCitas } from "../selectores.js"
-import { cargarEdicion } from "../funciones.js"
+import { contenedorCitas } from "../selectores"
+import { cargarEdicion } from "../funciones"
 
 export default class AdminCitas {
     constructor() {

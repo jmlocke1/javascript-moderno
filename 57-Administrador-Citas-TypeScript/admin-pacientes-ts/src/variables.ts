@@ -1,4 +1,4 @@
-import { generarId } from "./funciones.js"
+import { generarId } from "./funciones"
 
 let editando = {
     value: false

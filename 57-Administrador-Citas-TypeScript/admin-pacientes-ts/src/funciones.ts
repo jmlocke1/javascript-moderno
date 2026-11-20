@@ -1,7 +1,7 @@
-import Notificacion from './classes/Notificacion.js';
-import AdminCitas from './classes/AdminCitas.js';
-import { citaObj, editando } from './variables.js'
-import { formulario, formularioInput, pacienteInput, propietarioInput, emailInput, fechaInput, sintomasInput } from './selectores.js'
+import Notificacion from './classes/Notificacion';
+import AdminCitas from './classes/AdminCitas';
+import { citaObj, editando } from './variables'
+import { formulario, formularioInput, pacienteInput, propietarioInput, emailInput, fechaInput, sintomasInput } from './selectores'
 
 const citas = new AdminCitas()
 export function datosCita(e) {

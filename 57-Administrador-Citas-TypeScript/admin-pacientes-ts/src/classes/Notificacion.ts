@@ -1,4 +1,4 @@
-import { formulario } from '../selectores.js'
+import { formulario } from '../selectores'
 
 export default class Notificacion {
 
