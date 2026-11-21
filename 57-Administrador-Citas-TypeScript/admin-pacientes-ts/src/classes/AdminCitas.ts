@@ -1,34 +1,43 @@
 import { contenedorCitas } from "../selectores"
 import { cargarEdicion } from "../funciones"
 
+interface Cita {
+    id: string;
+    paciente: string;
+    propietario: string;
+    email: string;
+    fecha: string;
+    sintomas: string;
+}
 export default class AdminCitas {
+    citas: Cita[]
     constructor() {
         this.citas = []
     }
 
-    agregar(cita) {
+    agregar(cita : Cita) {
         this.citas = [...this.citas, cita]
         this.mostrar()
     }
 
-    editar(citaActualizada) {
+    editar(citaActualizada : Cita) {
         this.citas = this.citas.map( cita => cita.id === citaActualizada.id ? citaActualizada : cita )
         this.mostrar()
     }
 
-    eliminar(id) {
+    eliminar(id : Cita['id']) {
         this.citas = this.citas.filter( cita =>  cita.id !== id)
         this.mostrar()
     }
     mostrar() {
 
         // Limpiar el HTML
-        while(contenedorCitas.firstChild) {
+        while(contenedorCitas?.firstChild) {
             contenedorCitas.removeChild(contenedorCitas.firstChild)
         }
 
         // Si hay citas
-        if(this.citas.length === 0) {
+        if(this.citas.length === 0 && contenedorCitas) {
             contenedorCitas.innerHTML = '<p class="text-xl mt-5 mb-10 text-center">No Hay Pacientes</p>'
             return
         }
@@ -83,7 +92,7 @@ export default class AdminCitas {
             divCita.appendChild(fecha);
             divCita.appendChild(sintomas);
             divCita.appendChild(contenedorBotones)
-            contenedorCitas.appendChild(divCita);
+            contenedorCitas?.appendChild(divCita);
         });    
     }
 }
