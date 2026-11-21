@@ -3,9 +3,11 @@ import AdminCitas from './classes/AdminCitas';
 import { citaObj, editando } from './variables'
 import { formulario, formularioInput, pacienteInput, propietarioInput, emailInput, fechaInput, sintomasInput } from './selectores'
 
+
 const citas = new AdminCitas()
-export function datosCita(e) {
-    citaObj[e.target.name] = e.target.value
+export function datosCita(e: Event) {
+    const target = e.target as HTMLInputElement;
+    citaObj[target.name] = target.value
 }
 
 export function submitCita(e) {

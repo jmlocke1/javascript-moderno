@@ -1,7 +1,7 @@
 import { contenedorCitas } from "../selectores"
 import { cargarEdicion } from "../funciones"
 
-interface Cita {
+export interface Cita {
     id: string;
     paciente: string;
     propietario: string;
