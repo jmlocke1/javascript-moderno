@@ -1,14 +1,8 @@
 import { contenedorCitas } from "../selectores"
 import { cargarEdicion } from "../funciones"
+import type { Cita } from "../types"
 
-export interface Cita {
-    id: string;
-    paciente: string;
-    propietario: string;
-    email: string;
-    fecha: string;
-    sintomas: string;
-}
+
 export default class AdminCitas {
     citas: Cita[]
     constructor() {
